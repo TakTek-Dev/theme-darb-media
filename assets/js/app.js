@@ -1160,13 +1160,31 @@
     document.title = ep.title + " — " + p.title + " — درب ميديا";
 
     var progEps = episodesOf(p.slug).sort(function (a, b) { return a.no - b.no; });
-    var next = progEps.filter(function (x) { return x.no === ep.no + 1; })[0];
+    var epIndex = progEps.indexOf(ep);
+
+    /* programme playlist rows — the current episode carries a live indicator */
+    var plRows = progEps.map(function (x) {
+      var cur = x.id === ep.id;
+      return (
+        '<a class="pl-item' + (cur ? " is-current" : "") + '" href="' + (cur ? "#" : epURL(x)) + '"' +
+        (cur ? ' aria-current="true"' : "") + ">" +
+        '<span class="pl-no">' + (cur ? '<span class="pl-eq"><i></i><i></i><i></i></span>' : arNum(x.no)) + "</span>" +
+        '<span class="pl-thumb">' + thumbSVG(x) + "</span>" +
+        '<span class="pl-body">' +
+        '<span class="pl-title">' + esc(x.title) + "</span>" +
+        '<span class="pl-meta"><span class="ltr-num">' + esc(x.duration) + "</span></span>" +
+        "</span></a>"
+      );
+    }).join("");
 
     root.innerHTML =
       '<div class="watch-hero"><div class="container">' +
-      '<div class="crumb" style="max-width:980px;margin-inline:auto">' +
+      '<div class="crumb">' +
       '<a href="' + progURL(p) + '">' + esc(p.title) + "</a>" + icon("i-arrow", "icon--s") +
       "<span>الحلقة " + arNum(ep.no) + "</span></div>" +
+
+      '<div class="watch-grid">' +
+      '<div class="watch-main">' +
       '<div class="player" id="player">' +
       thumbSVG(ep, true) +
       '<div class="stage-scrim"></div>' +
@@ -1187,9 +1205,20 @@
       '<button class="btn btn--ghost btn--s" id="shareBtn">' + icon("i-share") + "مشاركة</button>" +
       '<button class="btn btn--gold btn--s" id="copyBtn">' + icon("i-copy") + "نسخ الرابط</button>" +
       "</div></div></div>" +
-      "</div></div>" +
+      "</div>" +
 
-      '<div class="watch-body"><div class="container"><div class="watch-cols">' +
+      /* playlist rail */
+      '<aside class="pl" aria-label="قائمة تشغيل البرنامج">' +
+      '<div class="pl-head">' +
+      '<span class="pl-kick">قائمة التشغيل</span>' +
+      '<a class="pl-prog" href="' + progURL(p) + '">' + esc(p.title) + "</a>" +
+      '<span class="pl-count"><span class="ltr-num">' + arNum(epIndex + 1) + " / " + arNum(progEps.length) + "</span></span>" +
+      "</div>" +
+      '<div class="pl-list" id="plList">' + plRows + "</div>" +
+      "</aside>" +
+      "</div></div></div>" +
+
+      '<div class="watch-body"><div class="container">' +
       '<div class="about-ep rv in">' +
       "<h2>عن الحلقة</h2>" +
       '<p class="about-text">' + esc(ep.description) + "</p>" +
@@ -1198,19 +1227,6 @@
         return '<a class="tag" href="search.html?q=' + encodeURIComponent(t) + '">' + esc(t) + "</a>";
       }).join("") +
       "</div></div>" +
-      '<aside class="next-ep rv in">' +
-      "<h2>التالي في البرنامج</h2>" +
-      (next
-        ? '<a class="next-card" href="' + epURL(next) + '">' +
-          '<div class="ep-thumb">' + thumbSVG(next) + "</div>" +
-          '<div class="next-body">' +
-          '<div class="next-kick">' + icon("i-play", "icon--fill icon--s") + "الحلقة " + arNum(next.no) + "</div>" +
-          '<div class="next-title">' + esc(next.title) + "</div>" +
-          '<div class="ep-meta" style="margin-block-start:8px"><span class="ltr-num">' + esc(next.duration) + "</span></div>" +
-          "</div></a>"
-        : '<div class="next-empty">هذه أحدث حلقة في «' + esc(p.title) + '».<br><a href="' + progURL(p) + '" style="color:var(--navy-700);font-weight:600">تصفّح حلقات البرنامج</a> أو تابع جديدنا على <a href="' + D.site.telegram + '" target="_blank" rel="noopener" style="color:var(--navy-700);font-weight:600">تيليجرام</a>.</div>') +
-      "</aside>" +
-      "</div>" +
 
       '<section class="section" style="padding-block-end:0">' +
       '<div class="sec-head"><h2>حلقات ذات صلة</h2>' +
@@ -1219,16 +1235,21 @@
       "</section>" +
       "</div></div>";
 
-    /* related: same program first, then shared tags */
-    var related = progEps.filter(function (x) { return x.id !== ep.id && (!next || x.id !== next.id); })
-      .sort(byDateDesc);
+    /* keep the current row in view inside the playlist rail */
+    var curRow = $(".pl-item.is-current");
+    if (curRow) curRow.scrollIntoView({ block: "nearest" });
+
+    /* related: other programmes with shared tags (the same programme already
+       lives in the playlist rail, so repeating it here would be noise) */
+    var tagset = {};
+    (ep.tags || []).forEach(function (t) { tagset[t] = 1; });
+    var related = D.episodes.filter(function (x) {
+      return x.program !== p.slug && (x.tags || []).some(function (t) { return tagset[t]; });
+    }).sort(byDateDesc);
     if (related.length < 3) {
-      var tagset = {};
-      (ep.tags || []).forEach(function (t) { tagset[t] = 1; });
-      var extra = D.episodes.filter(function (x) {
-        return x.program !== p.slug && (x.tags || []).some(function (t) { return tagset[t]; });
-      }).sort(byDateDesc);
-      related = related.concat(extra);
+      related = related.concat(D.episodes.filter(function (x) {
+        return x.program !== p.slug && related.indexOf(x) === -1;
+      }).sort(byDateDesc));
     }
     $("#relatedGrid").innerHTML = related.slice(0, 6).map(function (x) {
       return epCard(x);
