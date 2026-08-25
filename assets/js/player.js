@@ -339,7 +339,8 @@
     if (!this.opts.storageKey) return;
     var t = parseFloat(read("darb:pos:" + this.opts.storageKey));
     var v = this.video;
-    if (!isNaN(t) && t > 10 && v.duration && t < v.duration * 0.95) {
+    /* same floor as _savePos — anything saved is worth restoring */
+    if (!isNaN(t) && t > 5 && v.duration && t < v.duration * 0.95) {
       v.currentTime = t;
       var chip = el("div", "dp-resume", "استؤنف من " + fmt(t));
       this.root.appendChild(chip);

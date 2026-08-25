@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><style>html,body{margin:0;background:#fff}</style></head>
+<body>
+<iframe id="f" scrolling="no" style="border:0;display:block"></iframe>
+<script>
+  const q = new URLSearchParams(location.search);
+  const f = document.getElementById('f');
+  f.style.width = (q.get('w') || 375) + 'px';
+  f.style.height = (q.get('h') || 4000) + 'px';
+  f.src = q.get('u') || '/index.html';
+  const click = q.get('click');
+  if (click) {
+    f.addEventListener('load', () => {
+      setTimeout(() => {
+        const d = f.contentDocument, w = f.contentWindow;
+        const el = d.querySelector(click);
+        if (el) el.click();
+        // pause + freeze controls after playback starts, for a clean still
+        setTimeout(() => {
+          const v = d.querySelector('.dp-video');
+          if (v) { try { v.currentTime = 3; } catch(e){} v.pause(); }
+          const dp = d.querySelector('.dp');
+          if (dp) dp.classList.remove('dp-idle');
+        }, 5000);
+      }, 1000);
+    });
+  }
+</script>
+</body>
+</html>
