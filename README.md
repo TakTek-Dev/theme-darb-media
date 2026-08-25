@@ -36,6 +36,8 @@ video: { type: "telegram", src: "DarbM22/123" }   // channel/post
 
 Empty `type` shows an authored "source not linked yet" state.
 
+**Demo playback:** the bottom of `data.js` has a clearly marked block that fills every episode lacking a real source with a self-hosted branded clip from `assets/video/demo/` (5 clips, ~32 KB each, generated with ffmpeg — no external dependency, works offline). Setting a real `video` on an episode makes the loop skip it. **Delete that block before launch.**
+
 ## Short links
 
 Every episode's canonical short link is `/e/{id}`. On static hosting it is emulated as `episode.html?e={id}`. For production, add a rewrite so `/e/{id}` serves the episode page, e.g.:

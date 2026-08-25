@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/main.css?v=5">
+  <link rel="stylesheet" href="assets/css/main.css?v=33">
 </head>
 <body data-page="home" data-header="dark">
 <!--
@@ -59,31 +59,27 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="container">
         <div class="sec-head rv">
           <h2 id="programsTitle">البرامج</h2>
-          <a class="sec-more" href="programs.html">صفحة البرامج <svg class="icon icon--s" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+          <a class="sec-more" href="programs.html"><span id="programsMore">كل البرامج</span> <svg class="icon icon--s" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
         </div>
-        <div class="prog-list" id="programsList"></div>
+        <div class="pgm-list" id="programsList"></div>
       </div>
     </section>
 
-    <!-- Editors' picks -->
-    <section class="section" aria-labelledby="picksTitle">
+    <!-- Editors' picks — light band, one step down from the white above it -->
+    <section class="section section--alt" aria-labelledby="picksTitle">
       <div class="container">
         <div class="sec-head rv">
-          <h2 id="picksTitle">مختارات درب</h2>
-          <span class="sec-count">حلقات نعتقد أنها تستحق وقتك</span>
+          <h2 id="picksTitle">من الأرشيف</h2>
+          <span class="sec-count">حلقات أقدم تستحق العودة إليها</span>
         </div>
-        <div class="picks-grid">
-          <div id="pickLead"></div>
-          <div class="pick-rows" id="pickRows"></div>
-        </div>
+        <div class="arch-shelf" id="archShelf"></div>
       </div>
     </section>
 
     <!-- Brand statement -->
     <section class="statement" aria-label="عن درب ميديا">
       <div class="container">
-        <img class="statement-mark" src="assets/img/mark-dark.png" alt="">
-        <h2>نحكي عن فلسطين<span class="dot">..</span><br>بطريقة أخرى</h2>
+        <h2>نحكي عن فلسطين<span class="dot">..</span><br><span class="alt">بطريقة أخرى</span></h2>
         <p>منصة إعلامية عربية مستقلة — نوثّق برامجنا في أرشيف دائم قابل للبحث، كي تبقى الحكاية في متناول الجميع مهما حدث.</p>
         <div class="statement-actions">
           <a class="btn btn--gold" href="https://t.me/DarbM22" target="_blank" rel="noopener">
@@ -98,7 +94,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
   <div id="ftr"></div>
 
-  <script src="assets/js/data.js?v=5"></script>
-  <script src="assets/js/app.js?v=5"></script>
+  <script src="assets/js/data.js?v=33"></script>
+  <script src="assets/js/player.js?v=33"></script>
+  <script src="assets/js/app.js?v=33"></script>
 </body>
 </html>

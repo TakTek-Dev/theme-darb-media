@@ -79,10 +79,12 @@
   /* content type per program (used by search filters) */
   var PROG_TYPE = {
     "ijaz": "نشرة",
-    "qissat-khaliya": "وثائقي",
+    "shahadat": "وثائقي",
     "ala-aldarb": "بودكاست",
     "thakira": "وثائقي",
     "adasat-darb": "تقرير",
+    "masarat": "وثائقي",
+    "ala-alwaraq": "بودكاست",
   };
 
   /* ---------------- icons ---------------- */
@@ -105,6 +107,18 @@
     '<symbol id="i-telegram" viewBox="0 0 24 24"><path d="M21 4.5 3.6 11.2c-.9.35-.86 1.63.06 1.93l4.34 1.4 1.63 5.06c.28.87 1.4 1.05 1.94.32l2.4-3.24 4.53 3.32c.7.5 1.68.13 1.86-.72L23 5.9c.2-1-.8-1.8-2-1.4Z" transform="translate(-1.2 0)"/><path d="m8 14.5 9.5-8.5"/></symbol>' +
     '<symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"/></symbol>' +
     '<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5"/><circle cx="12" cy="8" r="0.7" fill="currentColor" stroke="none"/></symbol>' +
+    /* player set */
+    '<symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4.5" width="4.2" height="15" rx="1.2"/><rect x="13.8" y="4.5" width="4.2" height="15" rx="1.2"/></symbol>' +
+    '<symbol id="i-next" viewBox="0 0 24 24"><path d="M5 5.6v12.8c0 .9 1 1.4 1.7 1L16 13.2V18a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-1a1 1 0 0 0-1 1v4.8L6.7 4.7C6 4.2 5 4.7 5 5.6Z" transform="scale(-1,1) translate(-24,0)"/></symbol>' +
+    '<symbol id="i-b10" viewBox="0 0 24 24"><path d="M12 4.5a8 8 0 1 1-7.6 5.5"/><path d="M4 4.5v5h5"/><text x="12" y="15.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="currentColor" stroke="none" font-family="inherit">10</text></symbol>' +
+    '<symbol id="i-f10" viewBox="0 0 24 24"><path d="M12 4.5a8 8 0 1 0 7.6 5.5"/><path d="M20 4.5v5h-5"/><text x="12" y="15.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="currentColor" stroke="none" font-family="inherit">10</text></symbol>' +
+    '<symbol id="i-replay" viewBox="0 0 24 24"><path d="M12 5a7.5 7.5 0 1 1-7.2 5.2"/><path d="M4.5 3.5v5h5"/></symbol>' +
+    '<symbol id="i-vol" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4Z" fill="currentColor" stroke="none"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.8a7.6 7.6 0 0 1 0 10.4"/></symbol>' +
+    '<symbol id="i-vol-x" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4Z" fill="currentColor" stroke="none"/><path d="m15.5 9.5 5 5m0-5-5 5"/></symbol>' +
+    '<symbol id="i-pip" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2"/><rect x="11.5" y="11.5" width="6.5" height="5" rx="1" fill="currentColor" stroke="none"/></symbol>' +
+    '<symbol id="i-full" viewBox="0 0 24 24"><path d="M9 4.5H5.5a1 1 0 0 0-1 1V9M15 4.5h3.5a1 1 0 0 1 1 1V9M9 19.5H5.5a1 1 0 0 1-1-1V15M15 19.5h3.5a1 1 0 0 0 1-1V15"/></symbol>' +
+    '<symbol id="i-full-x" viewBox="0 0 24 24"><path d="M9 4.5V8a1 1 0 0 1-1 1H4.5M15 4.5V8a1 1 0 0 0 1 1h3.5M9 19.5V16a1 1 0 0 0-1-1H4.5M15 19.5V16a1 1 0 0 1 1-1h3.5"/></symbol>' +
+    '<symbol id="i-expand" viewBox="0 0 24 24"><path d="M14.5 4.5H19a.5.5 0 0 1 .5.5v4.5M9.5 19.5H5a.5.5 0 0 1-.5-.5v-4.5M19.5 4.5 13 11M4.5 19.5 11 13"/></symbol>' +
     "</svg>";
   function icon(name, cls) {
     return '<svg class="icon' + (cls ? " " + cls : "") + '" aria-hidden="true"><use href="#' + name + '"></use></svg>';
@@ -135,7 +149,7 @@
         var lw = W * (0.07 + ((s * (i + 3)) % 9) / 55);
         out += '<rect x="' + (W * 0.06) + '" y="' + y + '" width="' + lw + '" height="' + (H * 0.014) + '" rx="' + (H * 0.007) + '" fill="' + tone.line + '"/>';
       }
-    } else if (motif === "cell") {
+    } else if (motif === "network") {
       /* network of nodes and links */
       var pts = [];
       for (i = 0; i < 9; i++) {
@@ -196,32 +210,94 @@
       out += '<path d="M' + (W - mm - b) + " " + mm + " H" + (W - mm) + " V" + (mm + b) + '" stroke="#fff" stroke-opacity="0.5" stroke-width="' + vw2 + '" fill="none"/>';
       out += '<path d="M' + mm + " " + (H - mm - b) + " V" + (H - mm) + " H" + (mm + b) + '" stroke="#fff" stroke-opacity="0.5" stroke-width="' + vw2 + '" fill="none"/>';
       out += '<path d="M' + (W - mm - b) + " " + (H - mm) + " H" + (W - mm) + " V" + (H - mm - b) + '" stroke="#fff" stroke-opacity="0.5" stroke-width="' + vw2 + '" fill="none"/>';
+    } else if (motif === "map") {
+      /* contour lines + a route with a gold waypoint */
+      var lw3 = Math.max(1.1, W * 0.002);
+      for (i = 0; i < 5; i++) {
+        var yy = H * (0.2 + i * 0.14);
+        var amp2 = H * (0.05 + ((s * (i + 2)) % 7) / 90);
+        var d = "M0 " + yy;
+        for (x = 1; x <= 8; x++) {
+          d += " Q" + (W * (x - 0.5) / 8) + " " + (yy + (x % 2 ? -amp2 : amp2)) +
+               " " + (W * x / 8) + " " + yy;
+        }
+        out += '<path d="' + d + '" stroke="' + tone.line + '" stroke-width="' + lw3 + '" fill="none" opacity="' + (0.5 + i * 0.1) + '"/>';
+      }
+      /* the route itself */
+      var rx1 = W * 0.16, ry1 = H * 0.74, rx2 = W * 0.78, ry2 = H * 0.28;
+      out += '<path d="M' + rx1 + " " + ry1 + " C" + (W * 0.34) + " " + (H * 0.52) +
+             " " + (W * 0.52) + " " + (H * 0.66) + " " + rx2 + " " + ry2 +
+             '" stroke="' + GOLD + '" stroke-width="' + (W * 0.005) + '" fill="none" stroke-dasharray="' + (W * 0.02) + " " + (W * 0.016) + '"/>';
+      out += '<circle cx="' + rx1 + '" cy="' + ry1 + '" r="' + (W * 0.009) + '" fill="' + GOLD + '"/>';
+      out += '<circle cx="' + rx2 + '" cy="' + ry2 + '" r="' + (W * 0.013) + '" fill="none" stroke="' + GOLD + '" stroke-width="' + (W * 0.005) + '"/>';
+    } else if (motif === "column") {
+      /* printed text columns — one gold rule marks the live line */
+      var colW = W * 0.19, gap2 = W * 0.045, top = H * 0.16;
+      for (var c2 = 0; c2 < 3; c2++) {
+        var cx2 = W * 0.28 + c2 * (colW + gap2);
+        var lines = 9;
+        for (i = 0; i < lines; i++) {
+          var yl = top + i * (H * 0.075);
+          var frac = 0.55 + ((s * (i + c2 * 3 + 1)) % 45) / 100;
+          out += '<rect x="' + cx2 + '" y="' + yl + '" width="' + (colW * frac) + '" height="' + (H * 0.016) + '" rx="' + (H * 0.008) + '" fill="' + tone.line + '"/>';
+        }
+      }
+      var gy = top + (s % 8) * (H * 0.075);
+      out += '<rect x="' + (W * 0.28) + '" y="' + gy + '" width="' + (colW * 0.8) + '" height="' + (H * 0.016) + '" rx="' + (H * 0.008) + '" fill="' + GOLD + '"/>';
+      /* margin rule */
+      out += '<line x1="' + (W * 0.22) + '" y1="' + (H * 0.12) + '" x2="' + (W * 0.22) + '" y2="' + (H * 0.88) + '" stroke="' + tone.bg2 + '" stroke-width="' + Math.max(1.4, W * 0.003) + '"/>';
     }
     return out;
   }
 
   /* posters are emitted as INLINE SVG (not <img src="data:">) so the page's
      webfont (Noto Kufi Arabic) shapes the big episode numerals */
-  function thumbSVG(ep, big) {
+  function thumbSVG(ep, big, portrait) {
     var p = progOf(ep) || D.programs[0];
     var tone = TONES[p.tone] || TONES.deep;
-    var W = big ? 800 : 480, H = Math.round(W * 9 / 16);
+    var W, H;
+    if (portrait) { W = 480; H = 720; }        /* 2:3 archive poster */
+    else { W = big ? 800 : 480; H = Math.round(W * 9 / 16); }
     var s = seed(ep.id);
     var num = arNum(ep.no);
-    var numSize = big ? 210 : 138;
+    var numSize = portrait ? 190 : (big ? 210 : 138);
+    /* unique ids so multiple posters on one page keep their own defs */
+    var gid = "g" + s + "_" + Math.abs(seed(ep.slug));
     return (
       '<svg class="pm" viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">' +
-      '<rect width="' + W + '" height="' + H + '" fill="' + tone.bg + '"/>' +
+      "<defs>" +
+      '<linearGradient id="bg' + gid + '" x1="0" y1="0" x2="1" y2="1">' +
+      '<stop offset="0" stop-color="' + tone.bg2 + '"/>' +
+      '<stop offset="1" stop-color="' + tone.bg + '"/>' +
+      "</linearGradient>" +
+      '<radialGradient id="vg' + gid + '" cx="0.5" cy="0.42" r="0.78">' +
+      '<stop offset="0.45" stop-color="#000" stop-opacity="0"/>' +
+      '<stop offset="1" stop-color="#000" stop-opacity="0.42"/>' +
+      "</radialGradient>" +
+      "</defs>" +
+      '<rect width="' + W + '" height="' + H + '" fill="url(#bg' + gid + ')"/>' +
       motifSVG(p.motif, s, W, H, tone) +
-      /* big episode numeral, bottom-start (RTL visual right) */
-      '<text x="' + (W - 30) + '" y="' + (H - 26) + '" text-anchor="end" ' +
+      /* hero/portrait posters: an outline numeral that belongs to the artwork.
+         Small grid thumbs: solid but softened — outline would vanish there. */
+      (big
+        ? '<text x="30" y="' + (H - 26) + '" text-anchor="start" '
+        : '<text x="' + (W - 30) + '" y="' + (H - 26) + '" text-anchor="end" ') +
       'font-family="\'Noto Kufi Arabic\', \'IBM Plex Sans Arabic\', \'Segoe UI\', Tahoma, sans-serif" font-weight="800" ' +
-      'font-size="' + numSize + '" fill="#FFFFFF" fill-opacity="0.94">' + num + "</text>" +
-      /* small play mark, top-start corner */
+      'font-size="' + numSize + '" ' +
+      ((big || portrait)
+        ? 'fill="#FFFFFF" fill-opacity="0.07" stroke="#FFFFFF" stroke-opacity="0.34" stroke-width="' + Math.max(1.6, W * 0.0034) + '"'
+        : 'fill="#FFFFFF" fill-opacity="0.85"') +
+      ">" + num + "</text>" +
+      /* vignette last so it settles over the whole composition */
+      '<rect width="' + W + '" height="' + H + '" fill="url(#vg' + gid + ')"/>' +
+      /* small play mark, top-start corner — only on the small grid thumbs.
+         Hero and portrait posters carry their own play affordance, so here it
+         would just be a second, weaker one competing with it. */
+      ((portrait || big) ? "" :
       '<g transform="translate(' + (W - 54) + ',26)">' +
       '<rect x="0" y="0" width="28" height="28" rx="7" fill="' + GOLD + '"/>' +
       '<path d="M11 8.6v10.8c0 .7.8 1.1 1.4.75L20 14.6a.85.85 0 0 0 0-1.5l-7.6-5.55c-.6-.35-1.4.05-1.4.75Z" fill="' + tone.bg + '" transform="scale(0.93) translate(1,1)"/>' +
-      "</g>" +
+      "</g>") +
       "</svg>"
     );
   }
@@ -318,44 +394,44 @@
     var mount = $("#ftr");
     if (!mount) return;
     var year = new Date().getFullYear();
+    /* Colophon, not a second brand moment: the statement above owns the voice,
+       so the footer carries the mark once, never repeats that line, and keeps
+       its own contrast low. */
     mount.innerHTML =
       '<footer class="site-footer">' +
       '<div class="container">' +
       '<div class="footer-grid">' +
       '<div class="footer-brand">' +
       '<img src="assets/img/logo-dark.png" alt="درب ميديا">' +
-      "<p>" + esc(D.site.description) + "</p>" +
-      "</div>" +
+      /* not site.description — the statement right above already says that */
+      "<p>الجديد يصل قناتنا على تيليجرام أولًا، ثم يستقر هنا في الأرشيف — لكل حلقة صفحة ثابتة ورابط قصير يبقى صالحًا.</p>" +
+      '<div class="footer-social">' +
+      '<a class="social-btn" href="' + D.site.telegram + '" target="_blank" rel="noopener" aria-label="تيليجرام">' + icon("i-telegram", "icon--s") + "</a>" +
+      '<a class="social-btn" href="' + D.site.instagram + '" target="_blank" rel="noopener" aria-label="إنستغرام">' + icon("i-instagram", "icon--s") + "</a>" +
+      "</div></div>" +
       '<div class="footer-col"><h4>تصفّح</h4><ul>' +
       '<li><a href="index.html">الرئيسية</a></li>' +
       '<li><a href="programs.html">البرامج</a></li>' +
       '<li><a href="episodes.html">الحلقات</a></li>' +
       '<li><a href="search.html">بحث</a></li>' +
+      '<li><a href="about.html">عن درب ميديا</a></li>' +
       "</ul></div>" +
       '<div class="footer-col"><h4>البرامج</h4><ul>' +
       D.programs.map(function (p) {
         return '<li><a href="' + progURL(p) + '">' + esc(p.title) + "</a></li>";
       }).join("") +
       "</ul></div>" +
-      '<div class="footer-col"><h4>تابعنا</h4><ul>' +
-      '<li><a href="' + D.site.telegram + '" target="_blank" rel="noopener">' + icon("i-telegram", "icon--s") + "تيليجرام</a></li>" +
-      '<li><a href="' + D.site.instagram + '" target="_blank" rel="noopener">' + icon("i-instagram", "icon--s") + "إنستغرام</a></li>" +
-      '<li><a href="about.html">' + icon("i-info", "icon--s") + "عن درب ميديا</a></li>" +
-      "</ul></div>" +
       "</div>" +
       '<div class="footer-bottom">' +
-      '<span class="footer-statement">' + esc(D.site.statement) + "</span>" +
-      '<span class="sep">•</span>' +
-      "<span>منصة إعلامية عربية مستقلة</span>" +
-      '<span class="footer-copy">© ' + arNum(year) + " درب ميديا — جميع الحقوق محفوظة</span>" +
+      "<span>© " + arNum(year) + " درب ميديا — جميع الحقوق محفوظة</span>" +
+      '<span class="footer-note">منصة إعلامية عربية مستقلة</span>' +
       "</div></div></footer>";
   }
 
   /* =========================================================
      Cards
      ========================================================= */
-  function epCard(ep, opts) {
-    opts = opts || {};
+  function epCard(ep) {
     var p = progOf(ep);
     return (
       '<article class="ep-card">' +
@@ -365,10 +441,34 @@
       '<span class="thumb-play">' + icon("i-play", "icon--fill") + "</span>" +
       '<span class="thumb-dur">' + esc(ep.duration) + "</span>" +
       "</div>" +
+      /* hierarchy: thumbnail → title → program → metadata */
       '<div class="ep-body">' +
-      '<span class="ep-program">' + esc(p.title) + "</span>" +
       '<h3 class="ep-title">' + esc(ep.title) + "</h3>" +
-      '<div class="ep-meta"><span>' + icon("i-cal", "icon--s") + fmtDate(ep.date) + "</span></div>" +
+      '<div class="ep-meta">' +
+      '<span class="ep-program">' + esc(p.title) + "</span>" +
+      '<span class="meta-dot">·</span><span>' + fmtDate(ep.date) + "</span>" +
+      "</div></div></a></article>"
+    );
+  }
+
+  /* Archive shelf: portrait posters stamped with their year. Deliberately a
+     different object from the 16:9 episode cards above — an archive is browsed
+     by era, so the year is content here, not metadata. */
+  function archCard(ep) {
+    var p = progOf(ep);
+    var year = arNum(ep.date.slice(0, 4));
+    return (
+      '<article class="arch">' +
+      '<a href="' + epURL(ep) + '">' +
+      '<span class="arch-poster">' +
+      thumbSVG(ep, false, true) +
+      '<span class="arch-year">' + year + "</span>" +
+      '<span class="arch-play">' + icon("i-play", "icon--fill") + "</span>" +
+      "</span>" +
+      '<h3 class="arch-title">' + esc(ep.title) + "</h3>" +
+      '<div class="arch-meta">' +
+      "<span>" + esc(p.title) + '</span><span class="meta-dot">·</span>' +
+      '<span class="ltr-num">' + esc(ep.duration) + "</span>" +
       "</div></a></article>"
     );
   }
@@ -387,12 +487,12 @@
       '<span class="ep-program">' + esc(p.title) + "</span>" +
       '<h3 class="ep-title">' + esc(ep.title) + "</h3>" +
       '<p class="pick-desc">' + esc(ep.description) + "</p>" +
-      '<div class="ep-meta"><span>' + icon("i-cal", "icon--s") + fmtDate(ep.date) + "</span><span>" + icon("i-clock", "icon--s") + esc(ep.duration) + "</span></div>" +
+      '<div class="ep-meta"><span>' + fmtDate(ep.date) + '</span><span class="meta-dot">·</span><span class="ltr-num">' + esc(ep.duration) + "</span></div>" +
       "</div></a></article>"
     );
   }
 
-  function pickRow(ep, i) {
+  function pickRow(ep) {
     var p = progOf(ep);
     return (
       '<article class="ep-card pick-row">' +
@@ -402,14 +502,35 @@
       '<span class="thumb-play">' + icon("i-play", "icon--fill") + "</span>" +
       "</div>" +
       '<div class="pick-row-body">' +
-      '<span class="ep-program">' + esc(p.title) + "</span>" +
       '<h3 class="ep-title">' + esc(ep.title) + "</h3>" +
-      '<div class="ep-meta"><span>' + icon("i-clock", "icon--s") + esc(ep.duration) + "</span></div>" +
-      "</div></a></article>"
+      '<div class="ep-meta">' +
+      '<span class="ep-program">' + esc(p.title) + "</span>" +
+      '<span class="meta-dot">·</span><span class="ltr-num">' + esc(ep.duration) + "</span>" +
+      "</div></div></a></article>"
     );
   }
 
-  function progCard(p, i) {
+  /* Homepage programme index: a typographic line-up, not a stack of cards.
+     The artwork bleeds in from the inline-end edge and opens on hover, so the
+     programme name stays the loudest thing in the row. */
+  function progRow(p) {
+    var eps = episodesOf(p.slug);
+    return (
+      '<a class="pgm" href="' + progURL(p) + '">' +
+      '<span class="pgm-art" aria-hidden="true">' + coverSVG(p, true) + "</span>" +
+      '<span class="pgm-rule" aria-hidden="true"></span>' +
+      '<span class="pgm-main">' +
+      '<span class="pgm-name">' + esc(p.title) + "</span>" +
+      '<span class="pgm-tag">' + esc(p.tagline) + "</span>" +
+      "</span>" +
+      '<span class="pgm-meta">' +
+      '<span class="pgm-count">' + arNum(eps.length) + " حلقة</span>" +
+      '<span class="pgm-go">' + icon("i-arrow", "icon--s") + "</span>" +
+      "</span></a>"
+    );
+  }
+
+  function progCard(p) {
     var eps = episodesOf(p.slug);
     var last = eps.slice().sort(byDateDesc)[0];
     return (
@@ -420,9 +541,10 @@
       '<div class="prog-tag">' + esc(p.tagline) + "</div>" +
       '<p class="prog-desc">' + esc(p.description) + "</p>" +
       "</div>" +
+      /* count and CTA are support, never rivals to the programme identity */
       '<div class="prog-side">' +
-      '<div class="prog-count"><b>' + arNum(eps.length) + "</b>حلقات</div>" +
-      '<span class="btn btn--gold btn--s">' + icon("i-play", "icon--fill icon--s") + "مشاهدة البرنامج</span>" +
+      '<div class="prog-count"><b>' + arNum(eps.length) + "</b> حلقة</div>" +
+      '<span class="prog-cta">مشاهدة البرنامج' + icon("i-arrow", "icon--s") + "</span>" +
       "</div></a>"
     );
   }
@@ -458,6 +580,45 @@
       try { document.execCommand("copy"); done(); } catch (e) { toast("تعذّر النسخ"); }
       document.body.removeChild(ta);
     }
+  }
+
+  /* Shared playback mount — used by the homepage hero and the episode page.
+     mp4 sources get the full DarbPlayer (custom controls, floating dock,
+     shortcuts, resume); YouTube/Telegram embeds keep their own chrome.
+     Returns true when something was mounted. */
+  function mountPlayback(container, ep, autoplay) {
+    var v = ep.video || {};
+    if (!v.type || !v.src) return false;
+
+    if (v.type === "mp4" && window.DarbPlayer) {
+      var p = progOf(ep);
+      var progEps = episodesOf(p.slug).sort(function (a, b) { return a.no - b.no; });
+      var next = progEps.filter(function (x) { return x.no === ep.no + 1; })[0];
+      var player = new DarbPlayer(container, {
+        src: v.src,
+        title: ep.title,
+        storageKey: ep.id,
+        next: next ? { title: next.title, href: epURL(next) } : null,
+      });
+      if (autoplay) player.play();
+      container._darbPlayer = player;
+      return true;
+    }
+
+    var frame = "";
+    if (v.type === "youtube") {
+      frame = '<iframe class="player-frame" src="https://www.youtube-nocookie.com/embed/' +
+        encodeURIComponent(v.src) + "?autoplay=" + (autoplay ? 1 : 0) + '&rel=0" title="' + esc(ep.title) +
+        '" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+    } else if (v.type === "mp4") {
+      frame = '<video class="player-frame" src="' + esc(v.src) + '" controls ' + (autoplay ? "autoplay " : "") + "playsinline></video>";
+    } else if (v.type === "telegram") {
+      frame = '<iframe class="player-frame" src="https://t.me/' + esc(v.src) +
+        '?embed=1&mode=tme" title="' + esc(ep.title) + '"></iframe>';
+    }
+    if (!frame) return false;
+    container.innerHTML = frame;
+    return true;
   }
 
   function shareEp(ep) {
@@ -499,7 +660,7 @@
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var AUTO_SECS = 7;
 
-    /* stage */
+    /* stage — cinematic: text overlays the poster, the image sells the episode */
     var stage = $("#heroStage");
     function stageHTML(ep) {
       var p = progOf(ep);
@@ -507,35 +668,68 @@
         '<div class="stage-media" id="stageMedia">' +
         thumbSVG(ep, true) +
         '<div class="stage-scrim"></div>' +
-        '<a class="stage-play" href="' + epURL(ep) + '" aria-label="تشغيل: ' + esc(ep.title) + '">' +
-        '<span class="play-disc">' + icon("i-play", "icon--fill") + "</span></a>" +
+        '<button class="stage-play" data-hero-play="' + ep.id + '" aria-label="تشغيل: ' + esc(ep.title) + '">' +
+        '<span class="play-disc">' + icon("i-play", "icon--fill") + "</span></button>" +
+        '<div class="stage-note" id="stageNote">' + icon("i-info") +
+        "<span>لم يُربط مصدر الفيديو لهذه الحلقة بعد.</span></div>" +
         "</div>" +
         '<div class="stage-info">' +
         '<a class="stage-program" href="' + progURL(p) + '">' + icon("i-play", "icon--fill") + esc(p.title) + "</a>" +
         '<h1 class="stage-title"><a href="' + epURL(ep) + '">' + esc(ep.title) + "</a></h1>" +
-        '<p class="stage-desc">' + esc(ep.description) + "</p>" +
-        '<div class="stage-meta">' +
-        "<span>" + icon("i-cal", "icon--s") + fmtDate(ep.date) + "</span>" +
-        "<span>" + icon("i-clock", "icon--s") + esc(ep.duration) + "</span>" +
-        "</div>" +
+        '<div class="stage-meta"><span>' + fmtDate(ep.date) + '</span><span class="meta-dot">·</span><span class="ltr-num">' + esc(ep.duration) + "</span></div>" +
         '<div class="stage-actions">' +
-        '<a class="btn btn--gold" href="' + epURL(ep) + '">' + icon("i-play", "icon--fill") + "شاهد الحلقة</a>" +
-        '<button class="btn btn--ghost" data-copy="' + ep.id + '">' + icon("i-copy") + "نسخ الرابط</button>" +
+        '<a class="btn btn--gold btn--hero" href="' + epURL(ep) + '">' + icon("i-play", "icon--fill") + "شاهد الحلقة</a>" +
+        '<button class="btn btn--ghost btn--s" data-copy="' + ep.id + '">' + icon("i-copy") + "نسخ الرابط</button>" +
         "</div></div>"
       );
     }
 
+    var playingInline = false;
+
+    function destroyStagePlayer() {
+      var media = $("#stageMedia");
+      if (media && media._darbPlayer) {
+        media._darbPlayer.destroy();
+        media._darbPlayer = null;
+      }
+    }
+
     function renderStage(ep, animate) {
+      destroyStagePlayer();
+      stage.classList.remove("is-playing");
+      playingInline = false;
       if (!animate) {
         stage.innerHTML = stageHTML(ep);
         return;
       }
-      var media = $("#stageMedia");
-      if (media) media.classList.add("is-swapping");
-      var info = $(".stage-info", stage);
-      if (info) { info.style.opacity = "0"; info.style.transition = "opacity 240ms ease"; }
-      setTimeout(function () { stage.innerHTML = stageHTML(ep); }, 260);
+      stage.classList.add("is-swapping");
+      setTimeout(function () {
+        stage.innerHTML = stageHTML(ep);
+        stage.classList.remove("is-swapping");
+      }, 260);
     }
+
+    /* play the featured episode inline, right in the hero stage */
+    stage.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-hero-play]");
+      if (!btn) return;
+      var ep = epById[btn.getAttribute("data-hero-play")];
+      if (!ep) return;
+      playingInline = true;    // never yank a playing video away
+      stopAuto();
+      stage.classList.add("is-playing");
+      var ok = mountPlayback($("#stageMedia"), ep, true);
+      if (!ok) {
+        playingInline = false;
+        stage.classList.remove("is-playing");
+        var note = $("#stageNote");
+        if (note) {
+          note.classList.add("show");
+          clearTimeout(note._t);
+          note._t = setTimeout(function () { note.classList.remove("show"); }, 3600);
+        }
+      }
+    });
 
     /* strip */
     var strip = $("#heroStrip");
@@ -578,6 +772,7 @@
     var touchDevice = window.matchMedia("(pointer: coarse)").matches;
     function startAuto() {
       if (reduced || stripEps.length < 2) return;
+      if (playingInline) return; // a video is on screen; leave it alone
       /* on touch there is no hover-pause: stop after one full cycle (WCAG 2.2.2) */
       if (touchDevice && advances >= stripEps.length) return;
       stopAuto();
@@ -616,19 +811,22 @@
 
     /* latest */
     var latestEps = D.episodes.slice().sort(byDateDesc).slice(0, 8);
-    $("#latestGrid").innerHTML = latestEps.map(function (ep, i) {
-      return epCard(ep, { delay: (i % 4) * 60 });
+    $("#latestGrid").innerHTML = latestEps.map(function (ep) {
+      return epCard(ep);
     }).join("");
     $("#latestCount").textContent = arNum(D.episodes.length) + " حلقة في الأرشيف";
 
-    /* programs */
-    $("#programsList").innerHTML = D.programs.map(progCard).join("");
+    /* programs — the full line-up reads as an index, so it stays light enough
+       to show every programme without swallowing the page's rhythm */
+    $("#programsList").innerHTML = D.programs.map(progRow).join("");
+    var progMore = $("#programsMore");
+    if (progMore) progMore.textContent = "صفحة البرامج";
 
-    /* picks */
+    /* archive shelf — oldest-first, so the section reads as going back in time */
     var picks = (D.picks || []).map(function (id) { return epById[id]; }).filter(Boolean);
-    if (picks.length) {
-      $("#pickLead").innerHTML = pickLead(picks[0]);
-      $("#pickRows").innerHTML = picks.slice(1, 5).map(pickRow).join("");
+    var shelf = $("#archShelf");
+    if (shelf && picks.length) {
+      shelf.innerHTML = picks.slice().sort(byDateAsc).map(archCard).join("");
     }
   }
 
@@ -668,8 +866,8 @@
       '<div class="prog-tagline">' + esc(p.tagline) + "</div>" +
       '<p class="prog-about">' + esc(p.description) + "</p>" +
       '<div class="page-meta">' +
-      "<span>" + icon("i-grid", "icon--s") + arNum(eps.length) + " حلقات</span>" +
-      (lastDate ? "<span>" + icon("i-cal", "icon--s") + "آخر تحديث: " + fmtDate(lastDate.date) + "</span>" : "") +
+      "<span>" + arNum(eps.length) + " حلقات</span>" +
+      (lastDate ? '<span class="meta-dot">·</span><span>آخر تحديث: ' + fmtDate(lastDate.date) + "</span>" : "") +
       "</div></div>" +
       '<div class="prog-hero-cover">' + coverSVG(p, true) + "</div>" +
       "</div></div>";
@@ -677,8 +875,8 @@
     var sort = "new";
     function renderList() {
       var sorted = eps.slice().sort(sort === "new" ? byDateDesc : byDateAsc);
-      listEl.innerHTML = sorted.map(function (ep, i) {
-        return epCard(ep, { delay: (i % 4) * 50 });
+      listEl.innerHTML = sorted.map(function (ep) {
+        return epCard(ep);
       }).join("");
       initReveal();
     }
@@ -774,8 +972,8 @@
         emptyEl.style.display = "";
       } else {
         emptyEl.style.display = "none";
-        grid.innerHTML = res.map(function (ep, i) {
-          return epCard(ep, { delay: (i % 4) * 45 });
+        grid.innerHTML = res.map(function (ep) {
+          return epCard(ep);
         }).join("");
       }
       initReveal();
@@ -870,7 +1068,12 @@
       if (!q) return true;
       var p = progOf(ep);
       var hay = normAr(ep.title + " " + ep.description + " " + (ep.tags || []).join(" ") + " " + p.title + " " + p.tagline);
-      return q.split(/\s+/).every(function (w) { return hay.indexOf(w) !== -1; });
+      return q.split(/\s+/).every(function (w) {
+        if (hay.indexOf(w) !== -1) return true;
+        /* forgive the definite article: "الأدب" should also find "أدب" */
+        if (w.length > 3 && w.slice(0, 2) === "ال" && hay.indexOf(w.slice(2)) !== -1) return true;
+        return false;
+      });
     }
 
     function run() {
@@ -894,8 +1097,8 @@
         if (eq) eq.textContent = state.q.trim() ? "«" + state.q.trim() + "»" : "";
       } else {
         emptyEl.style.display = "none";
-        grid.innerHTML = res.map(function (ep, i) {
-          return epCard(ep, { delay: (i % 4) * 40 });
+        grid.innerHTML = res.map(function (ep) {
+          return epCard(ep);
         }).join("");
       }
       initReveal();
@@ -977,8 +1180,8 @@
       "<h1>" + esc(ep.title) + "</h1>" +
       '<div class="watch-row">' +
       '<div class="stage-meta">' +
-      "<span>" + icon("i-cal", "icon--s") + fmtDate(ep.date) + "</span>" +
-      "<span>" + icon("i-clock", "icon--s") + esc(ep.duration) + "</span>" +
+      "<span>" + fmtDate(ep.date) + "</span>" +
+      '<span class="meta-dot">·</span><span class="ltr-num">' + esc(ep.duration) + "</span>" +
       "</div>" +
       '<div class="watch-actions">' +
       '<button class="btn btn--ghost btn--s" id="shareBtn">' + icon("i-share") + "مشاركة</button>" +
@@ -1003,7 +1206,7 @@
           '<div class="next-body">' +
           '<div class="next-kick">' + icon("i-play", "icon--fill icon--s") + "الحلقة " + arNum(next.no) + "</div>" +
           '<div class="next-title">' + esc(next.title) + "</div>" +
-          '<div class="ep-meta" style="margin-block-start:8px"><span>' + icon("i-clock", "icon--s") + esc(next.duration) + "</span></div>" +
+          '<div class="ep-meta" style="margin-block-start:8px"><span class="ltr-num">' + esc(next.duration) + "</span></div>" +
           "</div></a>"
         : '<div class="next-empty">هذه أحدث حلقة في «' + esc(p.title) + '».<br><a href="' + progURL(p) + '" style="color:var(--navy-700);font-weight:600">تصفّح حلقات البرنامج</a> أو تابع جديدنا على <a href="' + D.site.telegram + '" target="_blank" rel="noopener" style="color:var(--navy-700);font-weight:600">تيليجرام</a>.</div>') +
       "</aside>" +
@@ -1027,24 +1230,14 @@
       }).sort(byDateDesc);
       related = related.concat(extra);
     }
-    $("#relatedGrid").innerHTML = related.slice(0, 6).map(function (x, i) {
-      return epCard(x, { delay: (i % 3) * 60 });
+    $("#relatedGrid").innerHTML = related.slice(0, 6).map(function (x) {
+      return epCard(x);
     }).join("");
 
     /* player */
     $("#playBtn").addEventListener("click", function () {
-      var v = ep.video || {};
-      var frame = "";
-      if (v.type === "youtube" && v.src) {
-        frame = '<iframe class="player-frame" src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(v.src) + '?autoplay=1&rel=0" title="' + esc(ep.title) + '" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
-      } else if (v.type === "mp4" && v.src) {
-        frame = '<video class="player-frame" src="' + esc(v.src) + '" controls autoplay playsinline></video>';
-      } else if (v.type === "telegram" && v.src) {
-        frame = '<iframe class="player-frame" src="https://t.me/' + esc(v.src) + '?embed=1&mode=tme" title="' + esc(ep.title) + '"></iframe>';
-      }
-      if (frame) {
-        var player = $("#player");
-        player.innerHTML = frame;
+      if (mountPlayback($("#player"), ep, true)) {
+        /* mounted */
       } else {
         var note = $("#playerNote");
         note.classList.add("show");
