@@ -43,6 +43,10 @@ Every episode's canonical short link is `/e/{id}`. On static hosting it is emula
 - **Netlify** `_redirects`: `/e/* /episode.html?e=:splat 200`
 - **nginx**: `location ~ ^/e/(.+)$ { rewrite ^/e/(.+)$ /episode.html?e=$1 last; }`
 
+## Social sharing (OG)
+
+Every page carries Open Graph + Twitter meta with a brand card (`assets/img/og-card.png`). In production, change `og:image` to an **absolute URL** (crawlers ignore relative ones), and ideally serve per-episode OG tags from the `/e/{id}` rewrite.
+
 ## Cache busting
 
 All CSS/JS references carry `?v=N`. Bump `N` on every asset change.

@@ -200,6 +200,8 @@
     return out;
   }
 
+  /* posters are emitted as INLINE SVG (not <img src="data:">) so the page's
+     webfont (Noto Kufi Arabic) shapes the big episode numerals */
   function thumbSVG(ep, big) {
     var p = progOf(ep) || D.programs[0];
     var tone = TONES[p.tone] || TONES.deep;
@@ -207,34 +209,34 @@
     var s = seed(ep.id);
     var num = arNum(ep.no);
     var numSize = big ? 210 : 138;
-    var svg =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + " " + H + '">' +
+    return (
+      '<svg class="pm" viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">' +
       '<rect width="' + W + '" height="' + H + '" fill="' + tone.bg + '"/>' +
       motifSVG(p.motif, s, W, H, tone) +
       /* big episode numeral, bottom-start (RTL visual right) */
       '<text x="' + (W - 30) + '" y="' + (H - 26) + '" text-anchor="end" ' +
-      'font-family="Noto Kufi Arabic, Segoe UI, Tahoma, sans-serif" font-weight="800" ' +
+      'font-family="\'Noto Kufi Arabic\', \'IBM Plex Sans Arabic\', \'Segoe UI\', Tahoma, sans-serif" font-weight="800" ' +
       'font-size="' + numSize + '" fill="#FFFFFF" fill-opacity="0.94">' + num + "</text>" +
       /* small play mark, top-start corner */
       '<g transform="translate(' + (W - 54) + ',26)">' +
       '<rect x="0" y="0" width="28" height="28" rx="7" fill="' + GOLD + '"/>' +
       '<path d="M11 8.6v10.8c0 .7.8 1.1 1.4.75L20 14.6a.85.85 0 0 0 0-1.5l-7.6-5.55c-.6-.35-1.4.05-1.4.75Z" fill="' + tone.bg + '" transform="scale(0.93) translate(1,1)"/>' +
       "</g>" +
-      "</svg>";
-    return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+      "</svg>"
+    );
   }
 
   function coverSVG(p, big) {
     var tone = TONES[p.tone] || TONES.deep;
     var W = big ? 800 : 640, H = Math.round(W * 9 / 16);
     var s = seed(p.slug);
-    var svg =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + " " + H + '">' +
+    return (
+      '<svg class="pm" viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">' +
       '<rect width="' + W + '" height="' + H + '" fill="' + tone.bg + '"/>' +
       motifSVG(p.motif, s, W, H, tone) +
       '<rect x="0" y="' + (H - 6) + '" width="' + W * 0.38 + '" height="6" fill="' + GOLD + '"/>' +
-      "</svg>";
-    return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+      "</svg>"
+    );
   }
 
   /* =========================================================
@@ -356,10 +358,10 @@
     opts = opts || {};
     var p = progOf(ep);
     return (
-      '<article class="ep-card rv"' + (opts.delay ? ' style="--d:' + opts.delay + 'ms"' : "") + ">" +
+      '<article class="ep-card">' +
       '<a href="' + epURL(ep) + '" aria-label="' + esc(ep.title) + '">' +
       '<div class="ep-thumb">' +
-      '<img src="' + thumbSVG(ep) + '" alt="" loading="lazy">' +
+      thumbSVG(ep) +
       '<span class="thumb-play">' + icon("i-play", "icon--fill") + "</span>" +
       '<span class="thumb-dur">' + esc(ep.duration) + "</span>" +
       "</div>" +
@@ -374,10 +376,10 @@
   function pickLead(ep) {
     var p = progOf(ep);
     return (
-      '<article class="ep-card pick-lead rv">' +
+      '<article class="ep-card pick-lead">' +
       '<a href="' + epURL(ep) + '">' +
       '<div class="ep-thumb">' +
-      '<img src="' + thumbSVG(ep, true) + '" alt="">' +
+      thumbSVG(ep, true) +
       '<span class="thumb-play">' + icon("i-play", "icon--fill") + "</span>" +
       '<span class="thumb-dur">' + esc(ep.duration) + "</span>" +
       "</div>" +
@@ -393,10 +395,10 @@
   function pickRow(ep, i) {
     var p = progOf(ep);
     return (
-      '<article class="ep-card pick-row rv" style="--d:' + (i * 70) + 'ms">' +
+      '<article class="ep-card pick-row">' +
       '<a href="' + epURL(ep) + '" style="display:contents">' +
       '<div class="ep-thumb">' +
-      '<img src="' + thumbSVG(ep) + '" alt="" loading="lazy">' +
+      thumbSVG(ep) +
       '<span class="thumb-play">' + icon("i-play", "icon--fill") + "</span>" +
       "</div>" +
       '<div class="pick-row-body">' +
@@ -411,8 +413,8 @@
     var eps = episodesOf(p.slug);
     var last = eps.slice().sort(byDateDesc)[0];
     return (
-      '<a class="prog-card rv" style="--d:' + (i * 60) + 'ms" href="' + progURL(p) + '">' +
-      '<div class="prog-cover"><img src="' + coverSVG(p) + '" alt="" loading="lazy"></div>' +
+      '<a class="prog-card" href="' + progURL(p) + '">' +
+      '<div class="prog-cover">' + coverSVG(p) + "</div>" +
       '<div class="prog-body">' +
       "<h3>" + esc(p.title) + "</h3>" +
       '<div class="prog-tag">' + esc(p.tagline) + "</div>" +
@@ -503,7 +505,7 @@
       var p = progOf(ep);
       return (
         '<div class="stage-media" id="stageMedia">' +
-        '<img src="' + thumbSVG(ep, true) + '" alt="' + esc(ep.title) + '">' +
+        thumbSVG(ep, true) +
         '<div class="stage-scrim"></div>' +
         '<a class="stage-play" href="' + epURL(ep) + '" aria-label="تشغيل: ' + esc(ep.title) + '">' +
         '<span class="play-disc">' + icon("i-play", "icon--fill") + "</span></a>" +
@@ -541,7 +543,7 @@
       var p = progOf(ep);
       return (
         '<button class="strip-item' + (i === 0 ? " active" : "") + '" data-i="' + i + '" style="--strip-secs:' + AUTO_SECS + 's">' +
-        '<span class="strip-thumb"><img src="' + thumbSVG(ep) + '" alt=""></span>' +
+        '<span class="strip-thumb">' + thumbSVG(ep) + "</span>" +
         "<span>" +
         '<span class="strip-p">' + esc(p.title) + "</span>" +
         '<span class="strip-t">' + esc(ep.title) + "</span>" +
@@ -572,11 +574,17 @@
     renderStage(featured, false);
 
     var timer = null;
+    var advances = 0;
+    var touchDevice = window.matchMedia("(pointer: coarse)").matches;
     function startAuto() {
       if (reduced || stripEps.length < 2) return;
+      /* on touch there is no hover-pause: stop after one full cycle (WCAG 2.2.2) */
+      if (touchDevice && advances >= stripEps.length) return;
       stopAuto();
       timer = setInterval(function () {
+        advances++;
         setActive((current + 1) % stripEps.length, true);
+        if (touchDevice && advances >= stripEps.length) stopAuto();
       }, AUTO_SECS * 1000);
     }
     function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
@@ -591,8 +599,15 @@
     });
 
     var hero = $(".hero");
-    hero.addEventListener("mouseenter", function () { hero.classList.add("paused"); stopAuto(); });
-    hero.addEventListener("mouseleave", function () { hero.classList.remove("paused"); startAuto(); });
+    function pauseAuto() { hero.classList.add("paused"); stopAuto(); }
+    function resumeAuto() { hero.classList.remove("paused"); startAuto(); }
+    hero.addEventListener("mouseenter", pauseAuto);
+    hero.addEventListener("mouseleave", resumeAuto);
+    /* keyboard users get the same pause as hover */
+    hero.addEventListener("focusin", pauseAuto);
+    hero.addEventListener("focusout", function (e) {
+      if (!hero.contains(e.relatedTarget)) resumeAuto();
+    });
     document.addEventListener("visibilitychange", function () {
       if (document.hidden) stopAuto(); else startAuto();
     });
@@ -656,7 +671,7 @@
       "<span>" + icon("i-grid", "icon--s") + arNum(eps.length) + " حلقات</span>" +
       (lastDate ? "<span>" + icon("i-cal", "icon--s") + "آخر تحديث: " + fmtDate(lastDate.date) + "</span>" : "") +
       "</div></div>" +
-      '<div class="prog-hero-cover rv in"><img src="' + coverSVG(p, true) + '" alt="' + esc(p.title) + '"></div>' +
+      '<div class="prog-hero-cover">' + coverSVG(p, true) + "</div>" +
       "</div></div>";
 
     var sort = "new";
@@ -776,11 +791,23 @@
 
     /* mobile sheet */
     var sheet = $("#filterSheet"), backdrop = $("#sheetBackdrop");
+    var sheetOpener = null;
     function setSheet(open) {
       sheet.classList.toggle("open", open);
       backdrop.classList.toggle("open", open);
       document.documentElement.style.overflow = open ? "hidden" : "";
+      if (open) {
+        sheetOpener = document.activeElement;
+        var first = $("select", sheet);
+        if (first) first.focus();
+      } else if (sheetOpener) {
+        sheetOpener.focus();
+        sheetOpener = null;
+      }
     }
+    sheet.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") setSheet(false);
+    });
     var openBtn = $("#filterOpen");
     if (openBtn) openBtn.addEventListener("click", function () { setSheet(true); });
     backdrop.addEventListener("click", function () { setSheet(false); });
@@ -938,7 +965,7 @@
       '<a href="' + progURL(p) + '">' + esc(p.title) + "</a>" + icon("i-arrow", "icon--s") +
       "<span>الحلقة " + arNum(ep.no) + "</span></div>" +
       '<div class="player" id="player">' +
-      '<img class="player-poster" src="' + thumbSVG(ep, true) + '" alt="' + esc(ep.title) + '">' +
+      thumbSVG(ep, true) +
       '<div class="stage-scrim"></div>' +
       '<button class="stage-play" id="playBtn" aria-label="تشغيل الحلقة">' +
       '<span class="play-disc">' + icon("i-play", "icon--fill") + "</span></button>" +
@@ -972,7 +999,7 @@
       "<h2>التالي في البرنامج</h2>" +
       (next
         ? '<a class="next-card" href="' + epURL(next) + '">' +
-          '<div class="ep-thumb"><img src="' + thumbSVG(next) + '" alt=""></div>' +
+          '<div class="ep-thumb">' + thumbSVG(next) + "</div>" +
           '<div class="next-body">' +
           '<div class="next-kick">' + icon("i-play", "icon--fill icon--s") + "الحلقة " + arNum(next.no) + "</div>" +
           '<div class="next-title">' + esc(next.title) + "</div>" +

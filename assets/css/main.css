@@ -110,6 +110,16 @@ input, textarea { caret-color: var(--gold-deep); }
 .hero-grid > *, .footer-grid > *, .watch-cols > *,
 .prog-card > *, .pick-row > *, .strip-item > * { min-width: 0; }
 
+/* ---------- generated posters (inline SVG behaves like a cover image) ---------- */
+.pm { width: 100%; height: 100%; display: block; direction: ltr; }
+.stage-media .pm, .player .pm { position: absolute; inset: 0; }
+.stage-media .pm { transition: opacity var(--t-slow) var(--ease), transform 1.2s var(--ease); }
+.stage-media.is-swapping .pm { opacity: 0; transform: scale(1.02); }
+.ep-thumb .pm, .prog-cover .pm { transition: transform var(--t-slow) var(--ease); }
+.ep-card:hover .ep-thumb .pm, .ep-card:focus-within .ep-thumb .pm { transform: scale(1.045); }
+.prog-card:hover .prog-cover .pm { transform: scale(1.05); }
+.pm text { font-family: "Noto Kufi Arabic", "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif; }
+
 /* ---------- icons ---------- */
 .icon {
   width: 20px; height: 20px;
@@ -563,7 +573,7 @@ input, textarea { caret-color: var(--gold-deep); }
   font-family: var(--f-display);
   font-size: 1.35rem; font-weight: 700; color: #fff;
 }
-.prog-body .prog-tag { color: var(--gold-strong); font-size: 0.85rem; font-weight: 600; margin-block-start: 2px; }
+.prog-body .prog-tag { color: var(--on-navy-2); font-size: 0.85rem; font-weight: 600; margin-block-start: 2px; }
 .prog-body p.prog-desc {
   color: var(--on-navy-2); font-size: 0.9375rem;
   margin-block-start: 10px; max-width: 58ch;
@@ -741,7 +751,7 @@ input, textarea { caret-color: var(--gold-deep); }
   font-size: clamp(2rem, 5vw, 3.1rem);
   font-weight: 800;
 }
-.prog-hero .prog-tagline { color: var(--gold-strong); font-weight: 600; margin-block-start: 6px; }
+.prog-hero .prog-tagline { color: var(--on-navy-2); font-weight: 600; margin-block-start: 6px; }
 .prog-hero p.prog-about { color: var(--on-navy-2); margin-block-start: 16px; max-width: 60ch; }
 .prog-hero .page-meta {
   margin-block-start: 20px;

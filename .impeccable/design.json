@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-25T00:00:00Z",
+  "title": "Design System: Darb Media",
+  "extensions": {
+    "colorMeta": {
+      "gold-strong": {
+        "role": "primary",
+        "displayName": "Action Gold",
+        "canonical": "#FBC118",
+        "tonalRamp": ["oklch(22% 0.05 88)", "oklch(32% 0.08 88)", "oklch(44% 0.11 88)", "oklch(56% 0.13 88)", "oklch(68% 0.15 88)", "oklch(78% 0.16 88)", "oklch(86% 0.17 88)", "oklch(94% 0.09 92)"]
+      },
+      "gold-ink": {
+        "role": "primary",
+        "displayName": "Gold Ink (AA text on light)",
+        "canonical": "#6E5703",
+        "tonalRamp": ["#3A2E01", "#544202", "#6E5703", "#8F7203", "#B08D04", "#D9A404", "#F5C21C", "#FBDC7A"]
+      },
+      "navy-700": {
+        "role": "secondary",
+        "displayName": "Brand Navy",
+        "canonical": "#20283F",
+        "tonalRamp": ["#0B101C", "#101624", "#141B2C", "#161D2F", "#1B2338", "#20283F", "#2A3450", "#3A4666"]
+      },
+      "navy-900": {
+        "role": "secondary",
+        "displayName": "Vault Navy (ceremonial bands)",
+        "canonical": "#101624",
+        "tonalRamp": ["#0B101C", "#101624", "#141B2C", "#161D2F", "#1B2338", "#20283F", "#2A3450", "#3A4666"]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Editorial Paper",
+        "canonical": "#FFFFFF",
+        "tonalRamp": ["#1B2233", "#525C72", "#656F87", "#D3D9E4", "#E2E6EE", "#EBEEF4", "#F4F6F9", "#FFFFFF"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#1B2233",
+        "tonalRamp": ["#1B2233", "#525C72", "#656F87", "#D3D9E4", "#E2E6EE", "#EBEEF4", "#F4F6F9", "#FFFFFF"]
+      },
+      "on-navy-2": {
+        "role": "neutral",
+        "displayName": "Muted on Navy",
+        "canonical": "#A9B3CD",
+        "tonalRamp": ["#3A4666", "#556080", "#707C9C", "#8A94B2", "#A9B3CD", "#C4CCDE", "#DFE3EE", "#FFFFFF"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display (Kufi 800)", "purpose": "Statement band and about hero; always pairs with the gold .dot span." },
+      "headline": { "displayName": "Headline (Kufi 800)", "purpose": "Page h1s; program hero scales up to clamp(2rem,5vw,3.1rem), watch title down to clamp(1.4rem,3vw,2rem)." },
+      "title": { "displayName": "Title (Kufi 700)", "purpose": "Section heads; card-level Kufi titles run 1.35-1.4rem fixed." },
+      "body": { "displayName": "Body (Plex 400)", "purpose": "Default 16px/1.7; long-form prose 1.0625rem at line-height 2-2.1, 70-72ch measure." },
+      "label": { "displayName": "Label (Plex 600)", "purpose": "Buttons, nav, filters at 0.875rem; meta 0.8125rem in the faint tone; micro-labels 0.75-0.78rem." }
+    },
+    "posterTones": {
+      "deep": { "bg": "#161D2F", "bg2": "#1B2338", "line": "#2A3450" },
+      "night": { "bg": "#101624", "bg2": "#161D2F", "line": "#242E48" },
+      "brand": { "bg": "#20283F", "bg2": "#26304A", "line": "#323E5E" },
+      "gold": "#FBC118",
+      "note": "Poster-only palette in app.js TONES; motifs: bulletin, cell, wave, halftone, lens. Inline SVG with class .pm, direction:ltr, preserveAspectRatio xMidYMid slice."
+    },
+    "shadows": [
+      { "name": "sh-1", "value": "0 1px 2px rgba(16, 22, 36, 0.05), 0 1px 6px rgba(16, 22, 36, 0.04)", "purpose": "Resting card thumbs on light; segmented active pill." },
+      { "name": "sh-2", "value": "0 10px 30px -12px rgba(16, 22, 36, 0.22), 0 2px 8px -2px rgba(16, 22, 36, 0.08)", "purpose": "Pick-lead thumb, toast, hover lift on floating cards." },
+      { "name": "sh-navy", "value": "0 16px 40px -16px rgba(11, 16, 28, 0.55)", "purpose": "Cinematic media shadow on navy: hero stage, player, program-hero cover." },
+      { "name": "focus-ring-gold", "value": "0 0 0 4px rgba(251, 193, 24, 0.18)", "purpose": "Search input focus glow paired with a gold border." },
+      { "name": "btn-gold-shadow", "value": "0 6px 18px -8px rgba(11, 16, 28, 0.5)", "purpose": "Grounds the primary gold button." },
+      { "name": "sheet-shadow", "value": "0 -18px 50px rgba(11, 16, 28, 0.25)", "purpose": "Mobile filter bottom sheet." }
+    ],
+    "motion": [
+      { "name": "ease", "value": "cubic-bezier(0.2, 0.7, 0.2, 1)", "purpose": "The single easing curve for every transition and animation." },
+      { "name": "t-fast", "value": "160ms", "purpose": "Color, border, small state shifts." },
+      { "name": "t-med", "value": "300ms", "purpose": "Overlays, underlines, lifts, toasts, sheets." },
+      { "name": "t-slow", "value": "520ms", "purpose": "Media scale, crossfades, section-head reveals (translateY 16px)." },
+      { "name": "stage-drift", "value": "1.2s", "purpose": "Hero/stage poster transform transition during swaps." },
+      { "name": "strip-secs", "value": "7s", "purpose": "Filmstrip auto-advance cadence; drives the linear gold stripbar hairline. Pauses on hover/focusin; stops after one cycle on coarse pointers; disabled under reduced motion." }
+    ],
+    "breakpoints": [
+      { "name": "desktop-narrow", "value": "1080px" },
+      { "name": "tablet", "value": "900px" },
+      { "name": "mobile", "value": "720px" },
+      { "name": "mobile-narrow", "value": "420px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Gold Button",
+      "kind": "button",
+      "refersTo": "button-gold",
+      "description": "The one primary action per region: play, watch, apply, follow.",
+      "html": "<button class=\"ds-btn ds-btn-gold\" dir=\"rtl\"><svg class=\"ds-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M7 4.8v14.4c0 .9 1 1.5 1.8 1L20.6 13a1.2 1.2 0 0 0 0-2L8.8 3.8c-.8-.5-1.8.1-1.8 1Z\" fill=\"currentColor\"/></svg>شاهد الحلقة</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 13px 26px; border-radius: var(--r-md, 10px); font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif; font-size: 0.9375rem; font-weight: 600; line-height: 1; border: 1px solid transparent; cursor: pointer; user-select: none; transition: background 160ms cubic-bezier(0.2,0.7,0.2,1), transform 160ms cubic-bezier(0.2,0.7,0.2,1); } .ds-btn:active { transform: translateY(1px); } .ds-btn:focus-visible { outline: 2px solid var(--gold-strong, #FBC118); outline-offset: 2px; } .ds-btn-gold { background: var(--gold-strong, #FBC118); color: var(--navy-900, #101624); box-shadow: 0 6px 18px -8px rgba(11,16,28,0.5); } .ds-btn-gold:hover { background: var(--gold-deep, #D9A404); } .ds-icon { width: 18px; height: 18px; flex: none; }"
+    },
+    {
+      "name": "Navy Button",
+      "kind": "button",
+      "refersTo": "button-navy",
+      "description": "Secondary solid action on light surfaces.",
+      "html": "<button class=\"ds-btn2 ds-btn-navy\" dir=\"rtl\">مسح الفلاتر</button>",
+      "css": ".ds-btn2 { display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 13px 26px; border-radius: var(--r-md, 10px); font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif; font-size: 0.9375rem; font-weight: 600; line-height: 1; border: 1px solid transparent; cursor: pointer; transition: background 160ms cubic-bezier(0.2,0.7,0.2,1), transform 160ms cubic-bezier(0.2,0.7,0.2,1); } .ds-btn2:active { transform: translateY(1px); } .ds-btn2:focus-visible { outline: 2px solid var(--gold-strong, #FBC118); outline-offset: 2px; } .ds-btn-navy { background: var(--navy-700, #20283F); color: #fff; } .ds-btn-navy:hover { background: var(--navy-600, #2A3450); }"
+    },
+    {
+      "name": "Ghost Button (on navy)",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action inside navy bands: hairline border, faint white fill.",
+      "html": "<div class=\"ds-navy-canvas\" dir=\"rtl\"><button class=\"ds-btn-ghost\">اعرف أكثر عنّا</button></div>",
+      "css": ".ds-navy-canvas { background: var(--navy-900, #101624); padding: 24px; border-radius: 14px; display: inline-block; } .ds-btn-ghost { display: inline-flex; align-items: center; gap: 9px; padding: 13px 26px; border-radius: var(--r-md, 10px); font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif; font-size: 0.9375rem; font-weight: 600; line-height: 1; color: #fff; border: 1px solid rgba(255,255,255,0.11); background: rgba(255,255,255,0.04); cursor: pointer; transition: background 160ms cubic-bezier(0.2,0.7,0.2,1), border-color 160ms cubic-bezier(0.2,0.7,0.2,1), transform 160ms cubic-bezier(0.2,0.7,0.2,1); } .ds-btn-ghost:hover { border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.09); } .ds-btn-ghost:active { transform: translateY(1px); } .ds-btn-ghost:focus-visible { outline: 2px solid var(--gold-strong, #FBC118); outline-offset: 2px; }"
+    },
+    {
+      "name": "Search Input",
+      "kind": "input",
+      "refersTo": "field-select",
+      "description": "The archive search box: 66px tall, gold border + soft gold ring on focus.",
+      "html": "<div class=\"ds-search\" dir=\"rtl\"><svg class=\"ds-search-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\"/><path d=\"m20 20-3.8-3.8\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\"/></svg><input type=\"search\" placeholder=\"ابحث عن حلقة أو برنامج...\" aria-label=\"بحث\"></div>",
+      "css": ".ds-search { position: relative; max-width: 480px; font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif; } .ds-search-icon { position: absolute; inset-inline-start: 20px; inset-block-start: 50%; translate: 0 -50%; width: 22px; height: 22px; color: var(--ink-3, #656F87); pointer-events: none; } .ds-search input { width: 100%; box-sizing: border-box; height: 66px; padding: 12px 58px; padding-inline-end: 24px; font: inherit; font-size: 1.125rem; color: var(--ink, #1B2233); border: 1.5px solid var(--line-2, #D3D9E4); border-radius: var(--r-lg, 14px); background: var(--paper, #FFFFFF); caret-color: var(--gold-deep, #D9A404); transition: border-color 160ms cubic-bezier(0.2,0.7,0.2,1), box-shadow 160ms cubic-bezier(0.2,0.7,0.2,1); } .ds-search input::placeholder { color: var(--ink-3, #656F87); } .ds-search input:focus { border-color: var(--gold-strong, #FBC118); box-shadow: 0 0 0 4px rgba(251,193,24,0.18); outline: none; }"
+    },
+    {
+      "name": "Filter Select",
+      "kind": "input",
+      "refersTo": "field-select",
+      "description": "Toolbar select with authored chevron; is-active state marks an applied filter.",
+      "html": "<div class=\"ds-field\" dir=\"rtl\"><select aria-label=\"البرنامج\"><option>كل البرامج</option><option>إيجاز</option><option>قصة خلية</option></select><svg class=\"ds-field-chev\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"m5.5 9 6.5 6.5L18.5 9\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></div>",
+      "css": ".ds-field { position: relative; display: inline-flex; align-items: center; font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif; } .ds-field select { appearance: none; -webkit-appearance: none; padding: 10px 16px; padding-inline-end: 40px; border: 1px solid var(--line, #E2E6EE); border-radius: var(--r-md, 10px); background: var(--paper, #FFFFFF); font: inherit; font-size: 0.875rem; font-weight: 500; color: var(--ink, #1B2233); cursor: pointer; max-width: 210px; transition: border-color 160ms cubic-bezier(0.2,0.7,0.2,1); } .ds-field select:hover { border-color: var(--line-2, #D3D9E4); } .ds-field select:focus-visible { outline: 2px solid var(--gold-strong, #FBC118); outline-offset: 1px; } .ds-field-chev { position: absolute; inset-inline-end: 14px; width: 15px; height: 15px; color: var(--ink-3, #656F87); pointer-events: none; }"
+    },
+    {
+      "name": "Episode Card",
+      "kind": "card",
+      "refersTo": "button-gold",
+      "description": "16:9 generated poster, rising gold play disc on hover, gold-diamond program label, tabular Arabic meta.",
+      "html": "<article class=\"ds-ep\" dir=\"rtl\"><a href=\"#\" class=\"ds-ep-link\"><span class=\"ds-ep-thumb\"><svg viewBox=\"0 0 480 270\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\" style=\"direction:ltr;display:block;width:100%;height:100%\"><rect width=\"480\" height=\"270\" fill=\"#20283F\"/><rect x=\"38\" y=\"120\" width=\"6\" height=\"34\" rx=\"3\" fill=\"#323E5E\"/><rect x=\"52\" y=\"104\" width=\"6\" height=\"66\" rx=\"3\" fill=\"#323E5E\"/><rect x=\"66\" y=\"90\" width=\"6\" height=\"94\" rx=\"3\" fill=\"#323E5E\"/><rect x=\"80\" y=\"112\" width=\"6\" height=\"50\" rx=\"3\" fill=\"#FBC118\"/><rect x=\"94\" y=\"98\" width=\"6\" height=\"78\" rx=\"3\" fill=\"#323E5E\"/><rect x=\"108\" y=\"118\" width=\"6\" height=\"38\" rx=\"3\" fill=\"#323E5E\"/><rect x=\"122\" y=\"92\" width=\"6\" height=\"90\" rx=\"3\" fill=\"#323E5E\"/><g transform=\"translate(426,26)\"><rect width=\"28\" height=\"28\" rx=\"7\" fill=\"#FBC118\"/><path d=\"M11 8.6v10.8c0 .7.8 1.1 1.4.75L20 14.6a.85.85 0 0 0 0-1.5l-7.6-5.55c-.6-.35-1.4.05-1.4.75Z\" fill=\"#20283F\"/></g><text x=\"450\" y=\"244\" text-anchor=\"end\" font-family=\"'Noto Kufi Arabic','IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif\" font-weight=\"800\" font-size=\"138\" fill=\"#FFFFFF\" fill-opacity=\"0.94\">٤</text></svg><span class=\"ds-ep-play\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M7 4.8v14.4c0 .9 1 1.5 1.8 1L20.6 13a1.2 1.2 0 0 0 0-2L8.8 3.8c-.8-.5-1.8.1-1.8 1Z\" fill=\"currentColor\"/></svg></span><span class=\"ds-ep-dur\">18:42</span></span><span class=\"ds-ep-body\"><span class=\"ds-ep-prog\">على الدرب</span><span class=\"ds-ep-title\">حوار مع شاهد على الحكاية — الجزء الرابع</span><span class=\"ds-ep-meta\">١٢ مايو ٢٠٢٦</span></span></a></article>",
+      "css": ".ds-ep { max-width: 300px; font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif; } .ds-ep-link { text-decoration: none; color: var(--ink, #1B2233); display: block; } .ds-ep-thumb { position: relative; display: block; border-radius: var(--r-md, 10px); overflow: hidden; aspect-ratio: 16 / 9; background: var(--paper-3, #EBEEF4); box-shadow: 0 1px 2px rgba(16,22,36,0.05), 0 1px 6px rgba(16,22,36,0.04); } .ds-ep-thumb::after { content: \"\"; position: absolute; inset: 0; background: rgba(11,16,28,0); transition: background 300ms cubic-bezier(0.2,0.7,0.2,1); } .ds-ep:hover .ds-ep-thumb::after { background: rgba(11,16,28,0.34); } .ds-ep-thumb svg { transition: transform 520ms cubic-bezier(0.2,0.7,0.2,1); } .ds-ep:hover .ds-ep-thumb svg { transform: scale(1.045); } .ds-ep-play { position: absolute; inset-block-end: 10px; inset-inline-start: 10px; z-index: 1; width: 42px; height: 42px; border-radius: 50%; background: var(--gold-strong, #FBC118); color: var(--navy-900, #101624); display: grid; place-items: center; opacity: 0; transform: translateY(8px); transition: opacity 300ms cubic-bezier(0.2,0.7,0.2,1), transform 300ms cubic-bezier(0.2,0.7,0.2,1); } .ds-ep-play svg { width: 17px; height: 17px; margin-inline-start: -2px; } .ds-ep:hover .ds-ep-play { opacity: 1; transform: none; } .ds-ep-dur { position: absolute; inset-block-end: 10px; inset-inline-end: 10px; z-index: 1; padding: 3px 9px; font-size: 0.75rem; font-weight: 600; font-variant-numeric: tabular-nums; color: #fff; background: rgba(11,16,28,0.72); border-radius: 6px; direction: ltr; } .ds-ep-body { display: block; padding-block-start: 13px; } .ds-ep-prog { font-size: 0.78rem; font-weight: 700; color: var(--gold-ink, #6E5703); display: inline-flex; align-items: center; gap: 6px; } .ds-ep-prog::before { content: \"\"; width: 5px; height: 5px; border-radius: 1px; background: var(--gold-strong, #FBC118); transform: rotate(45deg); } .ds-ep-title { display: block; font-size: 1rem; font-weight: 600; line-height: 1.6; margin-block-start: 5px; transition: transform 300ms cubic-bezier(0.2,0.7,0.2,1); } .ds-ep:hover .ds-ep-title { transform: translateX(-3px); } .ds-ep-meta { display: block; margin-block-start: 7px; font-size: 0.8125rem; color: var(--ink-3, #656F87); font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Segmented Sort",
+      "kind": "chip",
+      "refersTo": "segmented-active",
+      "description": "Sort control on program pages; active option is a navy pill.",
+      "html": "<div class=\"ds-seg\" role=\"group\" dir=\"rtl\"><button aria-pressed=\"true\">الأحدث أولًا</button><button aria-pressed=\"false\">الأقدم أولًا</button></div>",
+      "css": ".ds-seg { display: inline-flex; padding: 4px; background: var(--paper-2, #F4F6F9); border: 1px solid var(--line, #E2E6EE); border-radius: var(--r-md, 10px); gap: 2px; font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif; } .ds-seg button { padding: 8px 18px; font: inherit; font-size: 0.875rem; font-weight: 600; color: var(--ink-2, #525C72); background: none; border: 0; border-radius: 6px; cursor: pointer; transition: background 160ms cubic-bezier(0.2,0.7,0.2,1), color 160ms cubic-bezier(0.2,0.7,0.2,1); } .ds-seg button:hover { color: var(--ink, #1B2233); } .ds-seg button[aria-pressed=\"true\"] { background: var(--navy-700, #20283F); color: #fff; box-shadow: 0 1px 2px rgba(16,22,36,0.05), 0 1px 6px rgba(16,22,36,0.04); } .ds-seg button:focus-visible { outline: 2px solid var(--gold-strong, #FBC118); outline-offset: 2px; }"
+    },
+    {
+      "name": "Toast",
+      "kind": "custom",
+      "refersTo": "button-navy",
+      "description": "Copy-link confirmation: navy pill, gold check, auto-dismisses at 2.4s.",
+      "html": "<div class=\"ds-toast\" role=\"status\" dir=\"rtl\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"m4.5 12.5 5 5L19.5 7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>تم نسخ الرابط</div>",
+      "css": ".ds-toast { display: inline-flex; align-items: center; gap: 10px; padding: 13px 22px; background: var(--navy-900, #101624); color: #fff; border: 1px solid var(--navy-600, #2A3450); border-radius: 999px; font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif; font-size: 0.9rem; font-weight: 500; box-shadow: 0 10px 30px -12px rgba(16,22,36,0.22), 0 2px 8px -2px rgba(16,22,36,0.08); white-space: nowrap; } .ds-toast svg { color: var(--gold-strong, #FBC118); width: 18px; height: 18px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Broadcaster's Vault",
+    "overview": "A permanent Arabic archive that feels like a premium broadcaster's vault, not a news portal. Deep navy cinematic bands (where video lives) alternate with off-white editorial paper (where reading lives), and one gold voice points at everything playable. The newest episode is staged center-screen like a broadcast; the rest of the archive sits one search away behind hairlines, tabular numerals, and calm grids. The stated motto in the stylesheet header is the whole doctrine: \"Navy speaks, yellow points.\"\n\nDensity is editorial: generous section rhythm (76px bands), 16:9 media everywhere, thin 1px rules instead of boxes, moderate radii, restrained shadows. Every thumbnail is an authored geometric SVG poster generated per program — the site never shows a stock image or an empty gray placeholder. Confirmed rejections (pinned in PRODUCT.md and honored by the build): no SaaS genericity, no heavy gradients or glassmorphism, no childish cards, no extreme rounding, no colorful multi-hue UI.",
+    "keyCharacteristics": [
+      "Navy/paper band alternation with gold reserved for action, active state, and progress.",
+      "Noto Kufi Arabic display voice over IBM Plex Sans Arabic body — both loaded from Google Fonts.",
+      "Authored per-program SVG poster system (5 motifs, seeded variation, Arabic-Indic numerals).",
+      "One signature animation (hero filmstrip auto-advance); everything else responds to input.",
+      "RTL-first: logical properties only, LTR islands only where content demands it.",
+      "Fully data-driven: header, footer, cards, and pages render from assets/js/data.js; icons from an inline SVG sprite in app.js."
+    ],
+    "rules": [
+      { "name": "The Yellow Points Rule", "body": "Gold appears only where attention or action lives: play, CTA, active state, progress, focus. It never fills a surface, a background band, or body text. If a screen reads \"gold\" at a glance, it is wrong.", "section": "colors" },
+      { "name": "The Band Alternation Rule", "body": "Pages are built from full-width bands: navy for cinematic/media moments, paper for editorial/browsing moments, always separated cleanly — never gradients between them. The footer is always navy-950; the deepest navy carries the most ceremonial content.", "section": "colors" },
+      { "name": "The Three-Step Text Rule", "body": "Text on any surface uses exactly three tones (ink/ink-2/ink-3 on light; on-navy/on-navy-2/on-navy-3 on navy). New muted tones are not invented.", "section": "colors" },
+      { "name": "The Kufi Voice Rule", "body": "Noto Kufi Arabic appears only on headings, card titles, big numerals, and the mobile nav links — always weight 600–800. Every control, label, paragraph, and meta line is IBM Plex Sans Arabic. Arabic line-heights stay generous (headings ≥1.35, hero/watch titles 1.4–1.5) — tight Latin-style leading clips Arabic ascenders.", "section": "typography" },
+      { "name": "The Tabular Numbers Rule", "body": "Every count, date, and duration sets font-variant-numeric: tabular-nums. Dates render through Intl.DateTimeFormat(\"ar-EG\", …); standalone numbers convert through arNum() to Arabic-Indic digits. Durations (\"mm:ss\") and Latin handles/URLs are LTR islands.", "section": "typography" },
+      { "name": "The Hairline First Rule", "body": "Separation defaults to a 1px rule (line on paper, line-navy on navy). A shadow is only earned by media (sh-navy) or by something floating above the page (toast, sheet, hover lift).", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep every media surface 16:9 (picks lead 16:10 is the one sanctioned exception) with a navy-850/paper-3 well behind it.",
+      "Do write CSS with logical properties only — the entire stylesheet contains no physical left/right property, and any transform-origin that must track the reading edge goes through var(--tx-origin, right).",
+      "Do give every grid child min-width: 0 and wrap wide content in its own scroller.",
+      "Do put direction: ltr on any inline SVG containing text and on any mm:ss/URL/handle string inside the RTL page.",
+      "Do render all numerals Arabic-Indic (arNum() / ar-EG dates) with tabular-nums, and all icons from the sprite at stroke 1.75.",
+      "Do bump ?v=N on all CSS/JS references together on every asset change (currently ?v=5 across all seven pages).",
+      "Do start dark-hero pages with data-header=\"dark\" and light pages with data-header=\"light\" so the header contract resolves correctly."
+    ],
+    "donts": [
+      "Don't use gold as a surface, a text color for paragraphs, or on more than one primary action per region — and never lighten it for large fills; on light backgrounds gold text must step down to gold-ink.",
+      "Don't introduce raster thumbnails, stock photography, or icon fonts; posters are generated SVG, icons are the authored sprite.",
+      "Don't add decorative gradients, glassmorphism, or hard offset shadows — the only sanctioned gradients are scrims and the three faint radial tints; blur exists only on the scrolled header.",
+      "Don't exceed the radius tiers (7/10/14px + pill/circle) or round the bottom sheet's lower corners.",
+      "Don't add a second auto-playing animation; the filmstrip is the only self-moving element, and anything new must obey the same pause/reduced-motion/coarse-pointer discipline.",
+      "Don't hand-write card or page markup in HTML — extend the app.js renderers and data.js schema so a future CMS swap stays possible.",
+      "Don't animate cards in on scroll — reveals belong to section heads only."
+    ]
+  }
+}
