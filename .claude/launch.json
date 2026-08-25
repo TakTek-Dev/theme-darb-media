@@ -1,0 +1,15 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "darb",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "C:\\Users\\Msi\\AppData\\Local\\Temp\\claude\\D--MY-work-TakTek-2026-Darb-Media\\77b2def0-0565-4a0c-a9a2-d087cf7408ea\\scratchpad\\server.js",
+        "4173",
+        "D:\\MY work\\TakTek\\2026\\Darb Media"
+      ],
+      "port": 4173
+    }
+  ]
+}

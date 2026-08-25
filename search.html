@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>بحث — درب ميديا</title>
+  <meta name="description" content="ابحث في أرشيف درب ميديا الكامل — بالعنوان أو الموضوع أو البرنامج، مع فلاتر البرنامج والسنة ونوع المحتوى.">
+  <link rel="icon" type="image/png" href="assets/img/mark.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css?v=3">
+</head>
+<body data-page="search" data-header="light">
+  <div id="hdr"></div>
+
+  <main>
+    <section class="search-head">
+      <div class="container">
+        <h1>ابحث في الأرشيف</h1>
+        <div class="search-box">
+          <svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg>
+          <input type="search" id="searchInput" placeholder="ابحث عن حلقة أو برنامج..." autocomplete="off" aria-label="ابحث عن حلقة أو برنامج">
+        </div>
+        <div class="search-hints" id="searchHints"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="toolbar toolbar--search" aria-label="تصفية نتائج البحث">
+          <div class="field">
+            <select id="fProg" data-sf="p" aria-label="البرنامج"></select>
+            <svg class="icon field-chev" aria-hidden="true"><use href="#i-chev-d"></use></svg>
+          </div>
+          <div class="field">
+            <select id="fYear" data-sf="y" aria-label="السنة"></select>
+            <svg class="icon field-chev" aria-hidden="true"><use href="#i-chev-d"></use></svg>
+          </div>
+          <div class="field">
+            <select id="fType" data-sf="t" aria-label="نوع المحتوى"></select>
+            <svg class="icon field-chev" aria-hidden="true"><use href="#i-chev-d"></use></svg>
+          </div>
+          <button class="chip-clear" data-search-clear>
+            <svg class="icon icon--s" aria-hidden="true"><use href="#i-close"></use></svg>
+            مسح البحث
+          </button>
+          <span class="toolbar-count" id="searchCount"></span>
+        </div>
+
+        <div class="ep-grid" id="searchGrid"></div>
+
+        <div class="empty" id="searchEmpty" style="display:none">
+          <div class="empty-mark">
+            <svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg>
+          </div>
+          <h2>لم نجد نتائج مطابقة لبحثك <span id="emptyQuery"></span></h2>
+          <p>جرّب كلمة أبسط أو أقل تحديدًا، أو امسح الفلاتر — وربما تجد ضالّتك في تصفح البرامج مباشرة.</p>
+          <div class="empty-actions">
+            <button class="btn btn--navy btn--s" data-search-clear>مسح البحث والفلاتر</button>
+            <a class="btn btn--outline btn--s" href="programs.html">تصفّح البرامج</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="ftr"></div>
+
+  <script src="assets/js/data.js?v=3"></script>
+  <script src="assets/js/app.js?v=3"></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>درب ميديا — نحكي عن فلسطين.. بطريقة أخرى</title>
+  <meta name="description" content="الأرشيف الرسمي لبرامج وحلقات درب ميديا — منصة إعلامية عربية مستقلة تحكي عن فلسطين بطريقة أخرى. تصفّح البرامج، ابحث في الحلقات، وشارك الروابط.">
+  <link rel="icon" type="image/png" href="assets/img/mark.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css?v=3">
+</head>
+<body data-page="home" data-header="dark">
+<!--
+THESIS: a permanent Arabic archive that feels like a premium broadcaster's vault — the newest episode plays center-stage while the whole archive stays one search away; refuses the generic news-portal grid of identical teasers.
+OWN-WORLD: deep navy (#101624–#20283F) cinematic bands alternating with off-white editorial paper; brand gold (#FBC118) only on play/action/active; Noto Kufi Arabic display over IBM Plex Sans Arabic; hairlines, moderate radii, authored geometric SVG posters per program (bulletin wedge, cell network, soundwave, halftone, viewfinder).
+STORY: a follower lands on the latest episode, presses play, then discovers programs as playlists, filters the archive, and copies a short link to share.
+FIRST VIEWPORT: navy stage — featured episode poster 16:9 with gold play disc, Kufi title, meta, gold CTA "شاهد الحلقة"; inline-end filmstrip of 4 latest with auto-advancing gold hairline (signature interaction).
+FORM: brief-pinned direction (client spec: navy/gold, editorial+cinematic, Shahid-grade UX); concept dice skipped per pinned-brief rule; code-led (no image generation in session).
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+  <div id="hdr"></div>
+
+  <main>
+    <!-- Hero: featured episode stage + filmstrip -->
+    <section class="hero" aria-label="الحلقة المميزة">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-stage" id="heroStage"></div>
+          <aside class="hero-strip" aria-label="أحدث ما أُضيف">
+            <div class="hero-strip-label">يُعرض الآن في الأرشيف</div>
+            <div class="strip-scroller" id="heroStrip"></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Latest episodes -->
+    <section class="section" aria-labelledby="latestTitle">
+      <div class="container">
+        <div class="sec-head rv">
+          <h2 id="latestTitle">أحدث الحلقات</h2>
+          <span class="sec-count" id="latestCount"></span>
+          <a class="sec-more" href="episodes.html">كل الحلقات <svg class="icon icon--s" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        </div>
+        <div class="ep-grid rail" id="latestGrid"></div>
+      </div>
+    </section>
+
+    <!-- Programs -->
+    <section class="section on-navy" aria-labelledby="programsTitle">
+      <div class="container">
+        <div class="sec-head rv">
+          <h2 id="programsTitle">البرامج</h2>
+          <a class="sec-more" href="programs.html">صفحة البرامج <svg class="icon icon--s" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        </div>
+        <div class="prog-list" id="programsList"></div>
+      </div>
+    </section>
+
+    <!-- Editors' picks -->
+    <section class="section" aria-labelledby="picksTitle">
+      <div class="container">
+        <div class="sec-head rv">
+          <h2 id="picksTitle">مختارات درب</h2>
+          <span class="sec-count">حلقات نعتقد أنها تستحق وقتك</span>
+        </div>
+        <div class="picks-grid">
+          <div id="pickLead"></div>
+          <div class="pick-rows" id="pickRows"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Brand statement -->
+    <section class="statement" aria-label="عن درب ميديا">
+      <div class="container">
+        <img class="statement-mark" src="assets/img/mark-dark.png" alt="">
+        <h2>نحكي عن فلسطين<span class="dot">..</span><br>بطريقة أخرى</h2>
+        <p>منصة إعلامية عربية مستقلة — نوثّق برامجنا في أرشيف دائم قابل للبحث، كي تبقى الحكاية في متناول الجميع مهما حدث.</p>
+        <div class="statement-actions">
+          <a class="btn btn--gold" href="https://t.me/DarbM22" target="_blank" rel="noopener">
+            <svg class="icon" aria-hidden="true"><use href="#i-telegram"></use></svg>
+            تابعنا على تيليجرام
+          </a>
+          <a class="btn btn--ghost" href="about.html">اعرف أكثر عنّا</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="ftr"></div>
+
+  <script src="assets/js/data.js?v=3"></script>
+  <script src="assets/js/app.js?v=3"></script>
+</body>
+</html>
