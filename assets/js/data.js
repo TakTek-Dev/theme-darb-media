@@ -651,7 +651,7 @@ window.DARB = {
   /* 1) real local footage (assets/video) on the flagship episodes —
         exercises the custom player with real-length HD files */
   var LOCAL = {
-    "jz61aq": "assets/video/11025439-hd_2160_4096_30fps.mp4",
+    "jz61aq": "assets/video/11025439-web.mp4",
     "sh19bc": "assets/video/4352284-hd_1920_1080_25fps.mp4",
     "dr20pk": "assets/video/7252673-hd_1920_1080_25fps.mp4",
     "ad57uq": "assets/video/9932019-hd_1920_1080_24fps.mp4",

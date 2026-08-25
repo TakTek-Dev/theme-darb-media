@@ -394,21 +394,19 @@
     var mount = $("#ftr");
     if (!mount) return;
     var year = new Date().getFullYear();
-    /* Colophon, not a second brand moment: the statement above owns the voice,
-       so the footer carries the mark once, never repeats that line, and keeps
-       its own contrast low. */
+    /* Colophon, not a second brand moment: the statement above owns the voice.
+       The footer's own signature is the giant outline wordmark cropped by the
+       page edge — same lettering language as the poster numerals. */
+    var firstYear = D.episodes.map(function (e) { return e.date.slice(0, 4); }).sort()[0];
     mount.innerHTML =
       '<footer class="site-footer">' +
-      '<div class="container">' +
+      '<div class="container footer-inner">' +
       '<div class="footer-grid">' +
       '<div class="footer-brand">' +
       '<img src="assets/img/logo-dark.png" alt="درب ميديا">' +
       /* not site.description — the statement right above already says that */
       "<p>الجديد يصل قناتنا على تيليجرام أولًا، ثم يستقر هنا في الأرشيف — لكل حلقة صفحة ثابتة ورابط قصير يبقى صالحًا.</p>" +
-      '<div class="footer-social">' +
-      '<a class="social-btn" href="' + D.site.telegram + '" target="_blank" rel="noopener" aria-label="تيليجرام">' + icon("i-telegram", "icon--s") + "</a>" +
-      '<a class="social-btn" href="' + D.site.instagram + '" target="_blank" rel="noopener" aria-label="إنستغرام">' + icon("i-instagram", "icon--s") + "</a>" +
-      "</div></div>" +
+      "</div>" +
       '<div class="footer-col"><h4>تصفّح</h4><ul>' +
       '<li><a href="index.html">الرئيسية</a></li>' +
       '<li><a href="programs.html">البرامج</a></li>' +
@@ -421,11 +419,24 @@
         return '<li><a href="' + progURL(p) + '">' + esc(p.title) + "</a></li>";
       }).join("") +
       "</ul></div>" +
+      '<div class="footer-col"><h4>تواصل</h4><ul>' +
+      '<li><a href="' + D.site.telegram + '" target="_blank" rel="noopener">' + icon("i-telegram", "icon--s") + "تيليجرام</a></li>" +
+      '<li><a href="' + D.site.instagram + '" target="_blank" rel="noopener">' + icon("i-instagram", "icon--s") + "إنستغرام</a></li>" +
+      "</ul>" +
+      '<div class="footer-stats">' +
+      '<span class="fs-num">' + arNum(D.programs.length) + "</span> برامج" +
+      '<span class="fs-sep"></span>' +
+      '<span class="fs-num">' + arNum(D.episodes.length) + "</span> حلقة" +
+      '<span class="fs-sep"></span>' +
+      "أرشيف مفتوح منذ " + arNum(firstYear) +
+      "</div></div>" +
       "</div>" +
       '<div class="footer-bottom">' +
       "<span>© " + arNum(year) + " درب ميديا — جميع الحقوق محفوظة</span>" +
       '<span class="footer-note">منصة إعلامية عربية مستقلة</span>' +
-      "</div></div></footer>";
+      "</div></div>" +
+      '<div class="footer-wordmark" aria-hidden="true">درب ميديا</div>' +
+      "</footer>";
   }
 
   /* =========================================================

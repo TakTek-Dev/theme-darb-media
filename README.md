@@ -36,7 +36,13 @@ video: { type: "telegram", src: "DarbM22/123" }   // channel/post
 
 Empty `type` shows an authored "source not linked yet" state.
 
-**Demo playback:** the bottom of `data.js` has a clearly marked block that fills every episode lacking a real source with a self-hosted branded clip from `assets/video/demo/` (5 clips, ~32 KB each, generated with ffmpeg — no external dependency, works offline). Setting a real `video` on an episode makes the loop skip it. **Delete that block before launch.**
+**`mp4` sources get the custom DarbPlayer** (`assets/js/player.js`): seek bar with buffered + hover-time tooltip, ±10s, playback rate, volume, Picture-in-Picture, fullscreen, next-episode; a **floating mini-player** that docks to the corner when you scroll away mid-playback (the `<video>` element is never re-parented, so playback never restarts); keyboard shortcuts (Space/K play, M mute, F fullscreen, P PiP, ← → ±5s, J/L ±10s, ↑ ↓ volume, 0–9 jump); **resume** (position per episode in `localStorage`); remembered volume + rate; and an end-screen with a next-episode countdown. `youtube`/`telegram` keep their own embed chrome (the floating dock still applies).
+
+> **mp4 seeking needs HTTP Range (`206`) support** — every real static host (Netlify, nginx, S3, GitHub Pages) provides it, and so does the bundled dev server.
+
+The episode page pairs the player with a **programme playlist rail** (all episodes, current one flagged with a live equalizer); "related episodes" below is drawn from *other* programmes, since the current one already lives in the rail.
+
+**Demo playback:** the bottom of `data.js` has a clearly marked block that assigns sources to every episode lacking a real one — 4 local HD clips in `assets/video/` on flagship episodes, 4 YouTube embeds, and the tiny branded `assets/video/demo/` clips (~32 KB each) for the rest. Setting a real `video` on an episode makes the loop skip it. **Delete that block — and the `assets/video/` sample files — before launch.**
 
 ## Short links
 

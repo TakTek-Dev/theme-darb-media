@@ -1001,33 +1001,60 @@ input, textarea { caret-color: var(--gold-deep); }
    Footer
    ========================================================= */
 /* The statement and the footer are ONE closing block on one surface —
-   hairlines give the internal structure, so the page ends on a single
-   composition instead of two competing dark slabs. */
+   hairlines give the internal structure. The footer's own signature is a
+   giant outline wordmark cropped by the bottom edge of the page, drawn in
+   the same lettering language as the poster numerals. */
 .site-footer {
+  position: relative;
   background: var(--surface-deep);
   color: var(--on-dark-4);
   padding-block: 0;
   font-size: var(--t-meta);
+  overflow: hidden;
 }
+.footer-inner { position: relative; z-index: 1; }
 .footer-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.7fr) repeat(2, minmax(0, 1fr));
-  gap: 56px;
-  padding-block: 64px 56px;
+  grid-template-columns: minmax(0, 1.8fr) minmax(0, 0.9fr) minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 48px;
+  padding-block: 68px 48px;
   border-block-start: 1px solid var(--border-dark);
 }
-.footer-brand img { height: 44px; margin-block-end: 20px; opacity: 0.9; }
-.footer-brand p { max-width: 38ch; color: var(--on-dark-4); line-height: 1.9; }
-.footer-social { display: flex; gap: 10px; margin-block-start: 22px; }
-.footer-social .social-btn { width: 36px; height: 36px; }
+.footer-brand { max-width: 40ch; }
+.footer-brand img { height: 42px; margin-block-end: 20px; opacity: 0.92; }
+.footer-brand p { color: var(--on-dark-4); line-height: 1.9; }
 .footer-col h4 {
   color: var(--on-dark-2); font-size: var(--t-label); font-weight: 700;
-  letter-spacing: 0.04em;
-  margin-block-end: 18px;
+  letter-spacing: 0.06em;
+  padding-block-end: 14px;
+  margin-block-end: 16px;
+  border-block-end: 1px solid var(--border-dark);
 }
 .footer-col ul { display: flex; flex-direction: column; gap: 12px; }
-.footer-col a { color: var(--on-dark-3); transition: color var(--t-fast) var(--ease); display: inline-flex; align-items: center; gap: 8px; }
+.footer-col a {
+  color: var(--on-dark-3);
+  transition: color var(--t-fast) var(--ease);
+  display: inline-flex; align-items: center; gap: 9px;
+}
 .footer-col a:hover { color: var(--on-dark-1); }
+.footer-col a .icon { color: var(--on-dark-4); transition: color var(--t-fast) var(--ease); }
+.footer-col a:hover .icon { color: var(--accent); }
+
+/* archive-in-numbers line — data-driven, quiet */
+.footer-stats {
+  margin-block-start: 22px;
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+  font-size: var(--t-label); color: var(--on-dark-4);
+  line-height: 1.9;
+}
+.footer-stats .fs-num {
+  font-family: var(--f-display);
+  font-weight: 800; color: var(--on-dark-2);
+  font-variant-numeric: tabular-nums;
+  margin-inline-end: 3px;
+}
+.footer-stats .fs-sep { width: 3px; height: 3px; border-radius: 50%; background: var(--on-dark-4); opacity: 0.5; margin-inline: 4px; }
+
 .footer-bottom {
   border-block-start: 1px solid var(--border-dark);
   padding-block: 24px;
@@ -1036,6 +1063,26 @@ input, textarea { caret-color: var(--gold-deep); }
   font-variant-numeric: tabular-nums;
 }
 .footer-bottom .footer-note { margin-inline-start: auto; }
+
+/* the watermark: an outline Kufi wordmark cropped by the page edge, echoing
+   the poster numerals — the footer's own piece of the visual world */
+.footer-wordmark {
+  position: absolute;
+  inset-inline: 0; inset-block-end: -0.26em;
+  z-index: 0;
+  text-align: center;
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: clamp(4rem, 15vw, 13rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.065);
+  pointer-events: none;
+  white-space: nowrap;
+  -webkit-user-select: none; user-select: none;
+}
+
 .social-btn {
   width: 40px; height: 40px;
   display: grid; place-items: center;
@@ -2024,8 +2071,9 @@ video.player-frame { object-fit: contain; }
   .watch-hero { padding-block-start: calc(var(--hdr) + 16px); }
   .player { border-radius: var(--r-md); }
   .contact-cards { grid-template-columns: 1fr; }
-  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px 24px; padding-block: 52px 40px; }
   .footer-grid .footer-brand { grid-column: 1 / -1; }
+  .footer-wordmark { font-size: 22vw; inset-block-end: -0.2em; }
 
   .footer-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
   .footer-bottom .footer-note { margin-inline-start: 0; }
