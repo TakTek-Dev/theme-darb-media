@@ -282,6 +282,7 @@
     var v = this.video;
     if (v.duration) this.ui.played.style.width = (v.currentTime / v.duration * 100) + "%";
     this.ui.cur.textContent = fmt(v.currentTime);
+    this._paintBuf(); /* small files often buffer before the first progress event */
   };
   DarbPlayer.prototype._paintBuf = function () {
     var v = this.video;

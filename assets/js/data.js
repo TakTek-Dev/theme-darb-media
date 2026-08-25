@@ -648,13 +648,30 @@ window.DARB = {
      video: { type: "telegram", src: "DarbM22/123" }
    ========================================================= */
 (function fillDemoVideoSources(D) {
-  /* self-hosted branded clips (assets/video/demo) — no external dependency,
-     so playback works offline and on any host */
+  /* 1) real local footage (assets/video) on the flagship episodes —
+        exercises the custom player with real-length HD files */
+  var LOCAL = {
+    "jz61aq": "assets/video/11025439-hd_2160_4096_30fps.mp4",
+    "sh19bc": "assets/video/4352284-hd_1920_1080_25fps.mp4",
+    "dr20pk": "assets/video/7252673-hd_1920_1080_25fps.mp4",
+    "ad57uq": "assets/video/9932019-hd_1920_1080_24fps.mp4",
+  };
+  /* 2) a few YouTube episodes — exercises the embed path (own chrome,
+        floating dock still applies) */
+  var YT = {
+    "th08rk": "aqz-KE-bpKQ",
+    "dr13xz": "eRsGyueVLvQ",
+    "ms89hh": "R6MlUcmOul8",
+    "wr77gg": "WhWc3b3KhnY",
+  };
+  /* 3) everything else falls back to the tiny branded demo clips */
   var SAMPLES = ["darb-01", "darb-02", "darb-03", "darb-04", "darb-05"].map(function (n) {
     return "assets/video/demo/" + n + ".mp4";
   });
   D.episodes.forEach(function (ep, i) {
     if (ep.video && ep.video.type && ep.video.src) return; // real source wins
-    ep.video = { type: "mp4", src: SAMPLES[i % SAMPLES.length], demo: true };
+    if (LOCAL[ep.id]) ep.video = { type: "mp4", src: LOCAL[ep.id], demo: true };
+    else if (YT[ep.id]) ep.video = { type: "youtube", src: YT[ep.id], demo: true };
+    else ep.video = { type: "mp4", src: SAMPLES[i % SAMPLES.length], demo: true };
   });
 })(window.DARB);
