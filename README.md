@@ -12,6 +12,7 @@ Static multi-page site — no build step, runs on any static host.
 - `programs.html` / `program.html?p={slug}` — programs index / program archive
 - `episodes.html` — full archive with filters (program / year / month / sort)
 - `search.html` — live search with filters (program / year / content type)
+- `reels.html?e={id}` — **immersive Reels feed**: full-screen vertical scroll with snap, the visible reel plays and the rest pause, sources load in a ±2 window (and release beyond ±4 so memory stays flat), muted autoplay with a global unmute, blurred poster surround on desktop, step arrows, keyboard (↑/↓ navigate, Space play, M mute, Esc exit). The URL tracks the active reel so links share cleanly. Engine: `assets/js/reels.js`.
 - `episode.html?e={id}` — watch page (player, about, next-in-program, related)
 - `about.html` — about the platform
 - `assets/css/main.css` — design system (navy `#20283F` family + gold `#F5C21C`)
@@ -57,7 +58,11 @@ Every page carries Open Graph + Twitter meta with a brand card (`assets/img/og-c
 
 ## Cache busting
 
-All CSS/JS references carry `?v=N`. Bump `N` on every asset change.
+All CSS/JS references carry `?v=N`. Bump `N` on every asset change. Poster covers carry their own `?v` in `data.js` — bump it when re-extracting frames.
+
+## Loading behaviour
+
+Photo posters ship inside a programme-tinted gradient ground (`.pm-wrap`), fade in on decode, and carry a subtle tone glaze — a still-loading card reads as designed surface, never a blank slab. Above-the-fold media (hero stage, hero rail, first grid rows) loads eagerly with `fetchpriority="high"`; everything below stays `loading="lazy"`. Every page injects a skip-link and the card play disc is a real focusable `<button>` that opens the Reels feed.
 
 ## Fonts
 

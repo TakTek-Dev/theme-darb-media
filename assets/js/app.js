@@ -255,8 +255,23 @@
      The archive is a vertical-video (Reels) library: 9:16 is the DEFAULT
      poster format. `wide` exists only for the few genuinely landscape
      surfaces (programme covers use coverSVG instead). */
-  function thumbSVG(ep, big, wide) {
+  function thumbSVG(ep, big, wide, eager) {
     var p = progOf(ep) || D.programs[0];
+    /* a real poster frame beats a drawn placeholder — use it when present.
+       It ships inside a programme-tinted ground so a still-loading card is
+       never a blank slab, fades in on decode, and carries a faint tone
+       glaze that pulls the whole pool of stills toward the brand palette. */
+    if (ep.video && ep.video.poster && !wide) {
+      var t0 = TONES[p.tone] || TONES.deep;
+      return (
+        '<span class="pm pm-wrap" style="background:linear-gradient(165deg,' + t0.bg2 + " 0%," + t0.bg + ' 100%)">' +
+        '<img class="pm-img" src="' + esc(ep.video.poster) + '" alt=""' +
+        (eager ? ' fetchpriority="high"' : ' loading="lazy"') +
+        ' decoding="async" onload="this.classList.add(&quot;ok&quot;)">' +
+        '<span class="pm-glaze" style="background:' + t0.bg2 + '" aria-hidden="true"></span>' +
+        "</span>"
+      );
+    }
     var tone = TONES[p.tone] || TONES.deep;
     var W, H;
     if (wide) { W = big ? 800 : 480; H = Math.round(W * 9 / 16); }
@@ -316,6 +331,7 @@
      ========================================================= */
   var NAV = [
     { href: "index.html", label: "الرئيسية", latin: "Home", key: "home" },
+    { href: "reels.html", label: "ريلز", latin: "Reels", key: "reels" },
     { href: "programs.html", label: "البرامج", latin: "Programs", key: "programs" },
     { href: "episodes.html", label: "الحلقات", latin: "Episodes", key: "episodes" },
     { href: "about.html", label: "عن درب ميديا", latin: "About", key: "about" },
@@ -441,15 +457,16 @@
   /* ReelCard — the vertical-video primitive. The 9:16 thumbnail is the card;
      a restrained overlay carries the programme label (top) and duration
      (bottom), play appears on hover. Title + meta sit below, quiet. */
-  function epCard(ep) {
+  function epCard(ep, eager) {
     var p = progOf(ep);
     return (
       '<article class="reel">' +
       '<a href="' + epURL(ep) + '" aria-label="' + esc(ep.title) + '">' +
       '<div class="reel-media">' +
-      thumbSVG(ep) +
+      thumbSVG(ep, false, false, eager) +
       '<span class="reel-prog">' + esc(p.title) + "</span>" +
-      '<span class="reel-play">' + icon("i-play", "icon--fill") + "</span>" +
+      '<span class="reel-no">' + arNum(ep.no) + "</span>" +
+      '<button type="button" class="reel-play" data-reel="' + ep.id + '" aria-label="تشغيل في وضع الريلز: ' + esc(ep.title) + '">' + icon("i-play", "icon--fill") + "</button>" +
       '<span class="reel-dur"><span class="ltr-num">' + esc(ep.duration) + "</span></span>" +
       "</div>" +
       '<div class="reel-body">' +
@@ -467,10 +484,10 @@
       '<article class="reel pick-lead">' +
       '<a href="' + epURL(ep) + '">' +
       '<div class="reel-media">' +
-      thumbSVG(ep, true) +
+      thumbSVG(ep, true, false, true) +
       '<span class="reel-prog">' + esc(p.title) + "</span>" +
       '<span class="reel-year">' + arNum(ep.date.slice(0, 4)) + "</span>" +
-      '<span class="reel-play">' + icon("i-play", "icon--fill") + "</span>" +
+      '<button type="button" class="reel-play" data-reel="' + ep.id + '" aria-label="تشغيل في وضع الريلز: ' + esc(ep.title) + '">' + icon("i-play", "icon--fill") + "</button>" +
       '<span class="reel-dur"><span class="ltr-num">' + esc(ep.duration) + "</span></span>" +
       "</div>" +
       '<div class="reel-body">' +
@@ -489,7 +506,7 @@
       '<div class="reel-media">' +
       thumbSVG(ep) +
       '<span class="reel-year">' + arNum(ep.date.slice(0, 4)) + "</span>" +
-      '<span class="reel-play">' + icon("i-play", "icon--fill") + "</span>" +
+      '<button type="button" class="reel-play" data-reel="' + ep.id + '" aria-label="تشغيل في وضع الريلز: ' + esc(ep.title) + '">' + icon("i-play", "icon--fill") + "</button>" +
       "</div>" +
       '<div class="reel-body">' +
       '<h3 class="reel-title">' + esc(ep.title) + "</h3>" +
@@ -503,6 +520,8 @@
      programme name stays the loudest thing in the row. */
   function progRow(p) {
     var eps = episodesOf(p.slug);
+    var latest3 = eps.slice().sort(byDateDesc).slice(0, 3);
+    var lead = latest3[0];
     return (
       '<a class="pgm" href="' + progURL(p) + '">' +
       '<span class="pgm-art" aria-hidden="true">' + coverSVG(p, true) + "</span>" +
@@ -511,6 +530,14 @@
       '<span class="pgm-name">' + esc(p.title) + "</span>" +
       '<span class="pgm-tag">' + esc(p.tagline) + "</span>" +
       "</span>" +
+      /* the lead row's extra width carries its newest episode by name */
+      (lead
+        ? '<span class="pgm-latest"><span class="pgm-latest-k">أحدث حلقة</span><span class="pgm-latest-t">' + esc(lead.title) + "</span></span>"
+        : "") +
+      /* three newest stills — the programme's actual face, not an abstract */
+      '<span class="pgm-strip" aria-hidden="true">' +
+      latest3.map(function (x) { return '<span class="pgm-mini">' + thumbSVG(x) + "</span>"; }).join("") +
+      "</span>" +
       '<span class="pgm-meta">' +
       '<span class="pgm-count">' + arNum(eps.length) + " حلقة</span>" +
       '<span class="pgm-go">' + icon("i-arrow", "icon--s") + "</span>" +
@@ -518,16 +545,19 @@
     );
   }
 
-  function progCard(p) {
+  function progCard(p, lead) {
     var eps = episodesOf(p.slug);
-    var last = eps.slice().sort(byDateDesc)[0];
+    var latest3 = eps.slice().sort(byDateDesc).slice(0, 3);
     return (
-      '<a class="prog-card" href="' + progURL(p) + '">' +
-      '<div class="prog-cover">' + coverSVG(p) + "</div>" +
+      '<a class="prog-card' + (lead ? " prog-card--lead" : "") + '" href="' + progURL(p) + '">' +
+      '<div class="prog-cover">' + coverSVG(p, lead) + "</div>" +
       '<div class="prog-body">' +
       "<h3>" + esc(p.title) + "</h3>" +
       '<div class="prog-tag">' + esc(p.tagline) + "</div>" +
       '<p class="prog-desc">' + esc(p.description) + "</p>" +
+      '<span class="prog-strip" aria-hidden="true">' +
+      latest3.map(function (x) { return '<span class="prog-mini">' + thumbSVG(x) + "</span>"; }).join("") +
+      "</span>" +
       "</div>" +
       /* count and CTA are support, never rivals to the programme identity */
       '<div class="prog-side">' +
@@ -584,6 +614,7 @@
       var next = progEps.filter(function (x) { return x.no === ep.no + 1; })[0];
       var player = new DarbPlayer(container, {
         src: v.src,
+        poster: v.poster || "",
         title: ep.title,
         storageKey: ep.id,
         next: next ? { title: next.title, href: epURL(next) } : null,
@@ -658,7 +689,7 @@
           var xp = progOf(x);
           return (
             '<a class="hr-item" href="' + epURL(x) + '">' +
-            '<span class="hr-thumb">' + thumbSVG(x) + "</span>" +
+            '<span class="hr-thumb">' + thumbSVG(x, false, false, true) + "</span>" +
             '<span class="hr-body">' +
             '<span class="hr-title">' + esc(x.title) + "</span>" +
             '<span class="hr-meta">' + esc(xp.title) + ' · <span class="ltr-num">' + esc(x.duration) + "</span></span>" +
@@ -673,7 +704,7 @@
       var p = progOf(ep);
       return (
         '<div class="stage-media" id="stageMedia">' +
-        thumbSVG(ep, true) +
+        thumbSVG(ep, true, false, true) +
         '<div class="stage-scrim"></div>' +
         '<span class="stage-badge">' + icon("i-play", "icon--fill icon--s") + "ريلز</span>" +
         '<button class="stage-play" data-hero-play="' + ep.id + '" aria-label="تشغيل: ' + esc(ep.title) + '">' +
@@ -745,8 +776,8 @@
 
     /* latest */
     var latestEps = D.episodes.slice().sort(byDateDesc).slice(0, 8);
-    $("#latestGrid").innerHTML = latestEps.map(function (ep) {
-      return epCard(ep);
+    $("#latestGrid").innerHTML = latestEps.map(function (ep, i) {
+      return epCard(ep, i < 4);   /* first row rides the initial paint */
     }).join("");
     $("#latestCount").textContent = arNum(D.episodes.length) + " حلقة في الأرشيف";
 
@@ -783,7 +814,13 @@
      Page: programs
      ========================================================= */
   function pagePrograms() {
-    $("#programsList").innerHTML = D.programs.map(progCard).join("");
+    /* the deepest programme leads the line-up */
+    var ordered = D.programs.slice().sort(function (a, b) {
+      return episodesOf(b.slug).length - episodesOf(a.slug).length;
+    });
+    $("#programsList").innerHTML = ordered.map(function (p, i) {
+      return progCard(p, i === 0);
+    }).join("");
     $("#progCount").textContent =
       arNum(D.programs.length) + " برامج — " + arNum(D.episodes.length) + " حلقة";
   }
@@ -824,8 +861,8 @@
     var sort = "new";
     function renderList() {
       var sorted = eps.slice().sort(sort === "new" ? byDateDesc : byDateAsc);
-      listEl.innerHTML = sorted.map(function (ep) {
-        return epCard(ep);
+      listEl.innerHTML = sorted.map(function (ep, i) {
+        return epCard(ep, i < 8);
       }).join("");
       initReveal();
     }
@@ -921,8 +958,8 @@
         emptyEl.style.display = "";
       } else {
         emptyEl.style.display = "none";
-        grid.innerHTML = res.map(function (ep) {
-          return epCard(ep);
+        grid.innerHTML = res.map(function (ep, i) {
+          return epCard(ep, i < 8);
         }).join("");
       }
       initReveal();
@@ -1046,8 +1083,8 @@
         if (eq) eq.textContent = state.q.trim() ? "«" + state.q.trim() + "»" : "";
       } else {
         emptyEl.style.display = "none";
-        grid.innerHTML = res.map(function (ep) {
-          return epCard(ep);
+        grid.innerHTML = res.map(function (ep, i) {
+          return epCard(ep, i < 8);
         }).join("");
       }
       initReveal();
@@ -1150,11 +1187,26 @@
       '<div class="watch-actions">' +
       '<button class="btn btn--gold btn--s" id="copyBtn">' + icon("i-copy") + "نسخ الرابط</button>" +
       '<button class="btn btn--ghost btn--s" id="shareBtn">' + icon("i-share") + "مشاركة</button>" +
-      "</div></div>" +
+      "</div>" +
+      /* the column's tail points forward instead of trailing off */
+      (progEps[epIndex + 1]
+        ? (function (nx) {
+            return (
+              '<a class="watch-next" href="' + epURL(nx) + '">' +
+              '<span class="wn-thumb">' + thumbSVG(nx) + "</span>" +
+              '<span class="wn-body">' +
+              '<span class="wn-k">التالي في البرنامج</span>' +
+              '<span class="wn-t">' + esc(nx.title) + "</span>" +
+              '<span class="wn-m"><span class="ltr-num">' + esc(nx.duration) + "</span></span>" +
+              "</span></a>"
+            );
+          })(progEps[epIndex + 1])
+        : "") +
+      "</div>" +
 
       '<div class="watch-stage">' +
       '<div class="player" id="player">' +
-      thumbSVG(ep, true) +
+      thumbSVG(ep, true, false, true) +
       '<div class="stage-scrim"></div>' +
       '<button class="stage-play" id="playBtn" aria-label="تشغيل الفيديو">' +
       '<span class="play-disc">' + icon("i-play", "icon--fill") + "</span></button>" +
@@ -1199,7 +1251,8 @@
         return x.program !== p.slug && related.indexOf(x) === -1;
       }).sort(byDateDesc));
     }
-    $("#relatedGrid").innerHTML = related.slice(0, 6).map(function (x) {
+    /* exactly one full row — an orphaned 4+2 reads as a broken archive */
+    $("#relatedGrid").innerHTML = related.slice(0, 4).map(function (x) {
       return epCard(x);
     }).join("");
 
@@ -1224,13 +1277,33 @@
      ========================================================= */
   document.addEventListener("DOMContentLoaded", function () {
     document.body.insertAdjacentHTML("afterbegin", SPRITE);
+
+    /* keyboard route past the chrome, on every page with a <main> */
+    var mainEl = document.querySelector("main");
+    if (mainEl) {
+      if (!mainEl.id) mainEl.id = "main";
+      mainEl.setAttribute("tabindex", "-1");
+      document.body.insertAdjacentHTML(
+        "afterbegin",
+        '<a class="skip-link" href="#' + mainEl.id + '">تخطَّ إلى المحتوى</a>'
+      );
+    }
+
     renderHeader();
     renderFooter();
 
-    /* delegated copy buttons (hero) */
+    /* delegated: copy buttons (hero) + card play → Reels feed.
+       The play disc opens the immersive feed at that reel; the card itself
+       still links to the episode page. */
     document.body.addEventListener("click", function (e) {
       var b = e.target.closest("[data-copy]");
-      if (b) copyText(shortLink(epById[b.getAttribute("data-copy")]));
+      if (b) { copyText(shortLink(epById[b.getAttribute("data-copy")])); return; }
+      var play = e.target.closest(".reel-play");
+      if (play && play.getAttribute("data-reel")) {
+        e.preventDefault();
+        e.stopPropagation();
+        location.href = "reels.html?e=" + play.getAttribute("data-reel");
+      }
     });
 
     var page = document.body.getAttribute("data-page");
@@ -1240,7 +1313,45 @@
     else if (page === "episodes") pageEpisodes();
     else if (page === "search") pageSearch();
     else if (page === "episode") pageEpisode();
+    else if (page === "about") pageAbout();
 
     initReveal();
   });
+
+  /* =========================================================
+     Page: about — live facts + a wall of real archive stills
+     ========================================================= */
+  function pageAbout() {
+    var yearsAll = D.episodes.map(function (e) { return e.date.slice(0, 4); }).sort();
+    var stats = {
+      programs: arNum(D.programs.length),
+      episodes: arNum(D.episodes.length),
+      since: yearsAll.length ? arNum(yearsAll[0]) : "",
+    };
+    $$("[data-stat]").forEach(function (el) {
+      el.textContent = stats[el.getAttribute("data-stat")] || "";
+    });
+
+    /* the programmes line, generated so it can never go stale */
+    var progLine = $("#aboutPrograms");
+    if (progLine) {
+      progLine.innerHTML = arNum(D.programs.length) + " مسارات نمشي فيها بالتوازي: " +
+        D.programs.map(function (p) {
+          return '<a href="' + progURL(p) + '"><b>' + esc(p.title) + "</b></a> " + esc(p.tagline);
+        }).join("، ") + ".";
+    }
+
+    /* six stills, one per programme where possible — the archive's face */
+    var wall = $("#aboutWall");
+    if (wall) {
+      var picks = [];
+      D.programs.forEach(function (p) {
+        var eps = episodesOf(p.slug).sort(byDateDesc);
+        if (eps[0]) picks.push(eps[0]);
+      });
+      wall.innerHTML = picks.slice(0, 6).map(function (ep) {
+        return '<a href="' + epURL(ep) + '" aria-label="' + esc(ep.title) + '">' + thumbSVG(ep) + "</a>";
+      }).join("");
+    }
+  }
 })();

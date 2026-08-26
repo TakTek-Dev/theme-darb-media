@@ -648,22 +648,39 @@ window.DARB = {
      video: { type: "telegram", src: "DarbM22/123" }
    ========================================================= */
 (function fillDemoVideoSources(D) {
-  /* Every sample is true 9:16 (720×1280) — the archive is a vertical-video
-     library, so a landscape placeholder would misrepresent the product.
-     1) real portrait footage on the flagship reels */
-  var LOCAL = {
-    "jz61aq": "assets/video/11025439-portrait.mp4",
-    "sh19bc": "assets/video/4352284-portrait.mp4",
-    "dr20pk": "assets/video/7252673-portrait.mp4",
-    "ad57uq": "assets/video/9932019-portrait.mp4",
+  /* Every sample is true 9:16 (720×1280) portrait footage with a poster frame
+     pulled from the clip itself, so thumbnails show real video content instead
+     of a drawn placeholder. Assigned per programme so each series looks
+     coherent. Replace with the real Reels before launch. */
+  var base = "assets/video/";
+  var cov = "assets/img/covers/";
+  // pool of real portrait reels (file id → looks like)
+  var POOL = [
+    "reel-6781909",   // phone on a desk / filming
+    "reel-8134314",   // person reading a newspaper (editorial)
+    "reel-12294743",  // people standing with signs (field / report)
+    "reel-6325290",   // filming on a tripod
+    "11025439-portrait",
+    "4352284-portrait",
+    "7252673-portrait",
+    "9932019-portrait",
+  ];
+  // programme → preferred reel, so a series reads consistently
+  var BY_PROGRAM = {
+    "ijaz": "reel-12294743",     // newsroom / field
+    "shahadat": "reel-8134314",  // testimony / reading
+    "ala-aldarb": "reel-6781909",// interview setup
+    "thakira": "4352284-portrait",
+    "adasat-darb": "reel-6325290", // camera in the field
+    "masarat": "9932019-portrait",
+    "ala-alwaraq": "reel-8134314", // literature / reading
   };
-  /* 2) everything else falls back to the tiny branded portrait demo clips */
-  var SAMPLES = ["darb-01", "darb-02", "darb-03", "darb-04", "darb-05"].map(function (n) {
-    return "assets/video/demo/" + n + ".mp4";
-  });
   D.episodes.forEach(function (ep, i) {
     if (ep.video && ep.video.type && ep.video.src) return; // real source wins
-    if (LOCAL[ep.id]) ep.video = { type: "mp4", src: LOCAL[ep.id], demo: true };
-    else ep.video = { type: "mp4", src: SAMPLES[i % SAMPLES.length], demo: true };
+    // the flagship of each programme gets the programme's signature reel;
+    // the rest rotate through the pool so thumbnails vary within a series
+    var pick = (ep.no === 1 && BY_PROGRAM[ep.program]) || POOL[i % POOL.length];
+    /* ?v=2: covers were re-extracted at 720w — bust the old 400w cache */
+    ep.video = { type: "mp4", src: base + pick + ".mp4", poster: cov + pick + ".jpg?v=2", demo: true };
   });
 })(window.DARB);

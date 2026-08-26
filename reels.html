@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ريلز — درب ميديا</title>
+  <meta name="description" content="شاهد مقاطع درب ميديا في وضع الريلز — تصفّح عمودي متواصل لأرشيف الفيديو.">
+  <meta property="og:site_name" content="درب ميديا">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ريلز — درب ميديا">
+  <meta property="og:description" content="شاهد مقاطع درب ميديا في وضع الريلز — تصفّح عمودي متواصل لأرشيف الفيديو.">
+  <meta property="og:image" content="assets/img/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="assets/img/mark.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css?v=51">
+</head>
+<body data-page="reels" class="rf-page">
+
+  <!-- top chrome: brand at the start corner, exit at the end corner -->
+  <header class="rf-top">
+    <a class="rf-brand" href="index.html" aria-label="درب ميديا — الرئيسية">
+      <img src="assets/img/mark-dark.png" alt="درب ميديا">
+      <span>ريلز</span>
+    </a>
+    <button id="rfClose" class="rf-top-btn" aria-label="خروج من وضع الريلز">
+      <svg class="icon" aria-hidden="true"><use href="#i-close"></use></svg>
+    </button>
+  </header>
+
+  <!-- desktop step arrows -->
+  <div class="rf-steps" aria-hidden="false">
+    <button id="rfPrev" class="rf-step" aria-label="المقطع السابق">
+      <svg class="icon" aria-hidden="true"><use href="#i-chev-d"></use></svg>
+    </button>
+    <button id="rfNext" class="rf-step" aria-label="المقطع التالي">
+      <svg class="icon" aria-hidden="true"><use href="#i-chev-d"></use></svg>
+    </button>
+  </div>
+
+  <main id="reelsFeed" class="rf-feed" aria-label="ريلز درب ميديا"></main>
+
+  <script src="assets/js/data.js?v=51"></script>
+  <script src="assets/js/app.js?v=51"></script>
+  <script src="assets/js/reels.js?v=51"></script>
+</body>
+</html>

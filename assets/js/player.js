@@ -209,7 +209,10 @@
       return Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
     }
     this._on(track, "pointerdown", function (e) {
-      dragging = true; track.setPointerCapture(e.pointerId);
+      dragging = true;
+      /* the pointer can be gone by now (fast tap release) — capture is
+         an optimisation, never worth an uncaught NotFoundError */
+      try { track.setPointerCapture(e.pointerId); } catch (err) {}
       v.currentTime = pct(e) * (v.duration || 0);
     });
     this._on(track, "pointermove", function (e) {
@@ -226,7 +229,7 @@
       var r = vol.getBoundingClientRect();
       return Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
     }
-    this._on(vol, "pointerdown", function (e) { vdrag = true; vol.setPointerCapture(e.pointerId); v.muted = false; v.volume = vpct(e); });
+    this._on(vol, "pointerdown", function (e) { vdrag = true; try { vol.setPointerCapture(e.pointerId); } catch (err) {} v.muted = false; v.volume = vpct(e); });
     this._on(vol, "pointermove", function (e) { if (vdrag) v.volume = vpct(e); });
     this._on(vol, "pointerup", function () { vdrag = false; });
 
