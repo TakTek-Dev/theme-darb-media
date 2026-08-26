@@ -260,4 +260,34 @@
   windowSources(startIndex);
   if (startIndex > 0) items[startIndex].scrollIntoView();
   playItem(items[startIndex]);
+
+  /* ---------- cross-document view transition ----------
+     The start frame is the shared element the clicked card morphs into;
+     this script runs during parsing, so the tag is set before the first
+     paint that the transition captures. On exit (pageswap) the tag moves
+     to whichever frame is active, so it morphs back into its own card.
+     Inert in browsers without the API. */
+  var vtFrame = $(".rf-frame", items[startIndex]);
+  if (vtFrame) vtFrame.style.viewTransitionName = "reel-frame";
+  window.addEventListener("pagereveal", function (ev) {
+    if (!vtFrame) return;
+    /* drop the tag once the entry transition is done — a stale name on a
+       scrolled-away frame would hijack the next capture */
+    if (ev.viewTransition) {
+      ev.viewTransition.finished.finally(function () {
+        vtFrame.style.viewTransitionName = "";
+      });
+    } else {
+      vtFrame.style.viewTransitionName = "";
+    }
+  });
+  window.addEventListener("pageswap", function (ev) {
+    if (!ev.viewTransition) return;
+    items.forEach(function (it) {
+      var fr = $(".rf-frame", it);
+      if (fr) fr.style.viewTransitionName = "";
+    });
+    var active = activeItem && $(".rf-frame", activeItem);
+    if (active) active.style.viewTransitionName = "reel-frame";
+  });
 })();

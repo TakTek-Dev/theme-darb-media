@@ -1302,8 +1302,38 @@
       if (play && play.getAttribute("data-reel")) {
         e.preventDefault();
         e.stopPropagation();
+        /* cross-document view transition: tag the clicked frame as the
+           shared element before navigating. Inert where unsupported. */
+        var vtMedia = play.closest(".reel-media");
+        if (vtMedia) vtMedia.style.viewTransitionName = "reel-frame";
         location.href = "reels.html?e=" + play.getAttribute("data-reel");
       }
+    });
+
+    /* returning from the reels feed: the feed's active frame morphs back
+       into its own card. pagereveal fires before the first paint, so the
+       tag is in place when the transition captures the new page. */
+    window.addEventListener("pagereveal", function (ev) {
+      /* stale tags (bfcache restore, cancelled navigation) would collide
+         with the one we set next — clear first */
+      $$('.reel-media[style*="view-transition-name"]').forEach(function (m) {
+        m.style.viewTransitionName = "";
+      });
+      if (!ev.viewTransition) return;
+      var fromURL = null;
+      try {
+        fromURL = window.navigation && navigation.activation &&
+          navigation.activation.from && navigation.activation.from.url;
+      } catch (err) {}
+      if (!fromURL || fromURL.indexOf("reels.html") === -1) return;
+      var id = new URL(fromURL, location.href).searchParams.get("e");
+      var btn = id && document.querySelector('.reel-play[data-reel="' + id + '"]');
+      var media = btn && btn.closest(".reel-media");
+      if (!media) return;
+      media.style.viewTransitionName = "reel-frame";
+      ev.viewTransition.finished.finally(function () {
+        media.style.viewTransitionName = "";
+      });
     });
 
     var page = document.body.getAttribute("data-page");

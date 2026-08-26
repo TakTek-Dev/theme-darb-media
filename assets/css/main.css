@@ -2488,6 +2488,31 @@ video.player-frame { object-fit: contain; }
 }
 
 /* =========================================================
+   Cross-document view transition — Reel card → Reels feed
+   ---------------------------------------------------------
+   The 9:16 media frame is the shared element: the clicked
+   card morphs into the feed's frame (and back on exit).
+   The page snapshots themselves are silenced — no root
+   cross-fade — so the surrounding page stays visually quiet
+   and only the reel frame carries motion. Both snapshots
+   are 9:16, so the morph is a uniform scale, never a
+   distortion. Progressive: browsers without the API keep
+   plain navigation untouched.
+   ========================================================= */
+@view-transition { navigation: auto; }
+::view-transition-old(root),
+::view-transition-new(root) { animation: none; }
+::view-transition-group(reel-frame) {
+  animation-duration: 320ms;
+  animation-timing-function: var(--ease);
+}
+::view-transition-old(reel-frame),
+::view-transition-new(reel-frame) {
+  animation-duration: 320ms;
+  animation-timing-function: var(--ease);
+}
+
+/* =========================================================
    Reduced motion
    ========================================================= */
 @media (prefers-reduced-motion: reduce) {
@@ -2498,4 +2523,8 @@ video.player-frame { object-fit: contain; }
   }
   .rv { opacity: 1; transform: none; }
   html { scroll-behavior: auto !important; }
+  @view-transition { navigation: none; }
+  ::view-transition-group(reel-frame),
+  ::view-transition-old(reel-frame),
+  ::view-transition-new(reel-frame) { animation: none; }
 }
