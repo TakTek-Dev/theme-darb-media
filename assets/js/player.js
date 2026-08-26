@@ -271,13 +271,29 @@
     /* floating dock */
     if (o.float !== false && "IntersectionObserver" in window) {
       var io = new IntersectionObserver(function (en) {
-        var visible = en[0].isIntersecting;
-        if (!visible && !v.paused && !v.ended && !self.userClosedFloat) self._setFloat(true);
-        else if (visible) { self._setFloat(false); self.userClosedFloat = false; }
+        self._slotVisible = en[0].isIntersecting;
+        if (self._slotVisible) self.userClosedFloat = false;
+        self._evalFloat();
       }, { threshold: 0.25 });
       io.observe(this.slot);
       this._teardown.push(function () { io.disconnect(); });
     }
+
+    /* Picture-in-Picture and the in-page dock solve the same problem, so
+       they are mutually exclusive: entering PiP retracts the dock, leaving
+       it re-docks if the player is still scrolled away and playing. */
+    this._on(v, "enterpictureinpicture", function () { self._evalFloat(); });
+    this._on(v, "leavepictureinpicture", function () { self._evalFloat(); });
+  };
+
+  /* single decision point for the dock — every trigger routes through it */
+  DarbPlayer.prototype._evalFloat = function () {
+    var v = this.video;
+    var inPiP = document.pictureInPictureElement === v;
+    this._setFloat(
+      this._slotVisible === false && !inPiP &&
+      !v.paused && !v.ended && !this.userClosedFloat
+    );
   };
 
   /* ---------------- helpers ---------------- */
