@@ -251,16 +251,19 @@
   }
 
   /* posters are emitted as INLINE SVG (not <img src="data:">) so the page's
-     webfont (Noto Kufi Arabic) shapes the big episode numerals */
-  function thumbSVG(ep, big, portrait) {
+     webfont (Noto Kufi Arabic) shapes the big episode numerals.
+     The archive is a vertical-video (Reels) library: 9:16 is the DEFAULT
+     poster format. `wide` exists only for the few genuinely landscape
+     surfaces (programme covers use coverSVG instead). */
+  function thumbSVG(ep, big, wide) {
     var p = progOf(ep) || D.programs[0];
     var tone = TONES[p.tone] || TONES.deep;
     var W, H;
-    if (portrait) { W = 480; H = 720; }        /* 2:3 archive poster */
-    else { W = big ? 800 : 480; H = Math.round(W * 9 / 16); }
+    if (wide) { W = big ? 800 : 480; H = Math.round(W * 9 / 16); }
+    else { W = big ? 720 : 480; H = Math.round(W * 16 / 9); }
     var s = seed(ep.id);
     var num = arNum(ep.no);
-    var numSize = portrait ? 190 : (big ? 210 : 138);
+    var numSize = wide ? (big ? 210 : 138) : (big ? 220 : 160);
     /* unique ids so multiple posters on one page keep their own defs */
     var gid = "g" + s + "_" + Math.abs(seed(ep.slug));
     return (
@@ -277,27 +280,20 @@
       "</defs>" +
       '<rect width="' + W + '" height="' + H + '" fill="url(#bg' + gid + ')"/>' +
       motifSVG(p.motif, s, W, H, tone) +
-      /* hero/portrait posters: an outline numeral that belongs to the artwork.
-         Small grid thumbs: solid but softened — outline would vanish there. */
-      (big
-        ? '<text x="30" y="' + (H - 26) + '" text-anchor="start" '
-        : '<text x="' + (W - 30) + '" y="' + (H - 26) + '" text-anchor="end" ') +
+      /* outline numeral, part of the artwork — bottom-start on portrait, where
+         there is real vertical room; the wide variant keeps the old placement */
+      (wide
+        ? (big
+            ? '<text x="30" y="' + (H - 26) + '" text-anchor="start" '
+            : '<text x="' + (W - 30) + '" y="' + (H - 26) + '" text-anchor="end" ')
+        /* portrait: sits above the duration chip, clear of the frame edge */
+        : '<text x="' + (W - 34) + '" y="' + (H - 120) + '" text-anchor="end" ') +
       'font-family="\'Noto Kufi Arabic\', \'IBM Plex Sans Arabic\', \'Segoe UI\', Tahoma, sans-serif" font-weight="800" ' +
       'font-size="' + numSize + '" ' +
-      ((big || portrait)
-        ? 'fill="#FFFFFF" fill-opacity="0.07" stroke="#FFFFFF" stroke-opacity="0.34" stroke-width="' + Math.max(1.6, W * 0.0034) + '"'
-        : 'fill="#FFFFFF" fill-opacity="0.85"') +
+      'fill="#FFFFFF" fill-opacity="0.07" stroke="#FFFFFF" stroke-opacity="0.32" stroke-width="' + Math.max(1.6, W * 0.0034) + '"' +
       ">" + num + "</text>" +
       /* vignette last so it settles over the whole composition */
       '<rect width="' + W + '" height="' + H + '" fill="url(#vg' + gid + ')"/>' +
-      /* small play mark, top-start corner — only on the small grid thumbs.
-         Hero and portrait posters carry their own play affordance, so here it
-         would just be a second, weaker one competing with it. */
-      ((portrait || big) ? "" :
-      '<g transform="translate(' + (W - 54) + ',26)">' +
-      '<rect x="0" y="0" width="28" height="28" rx="7" fill="' + GOLD + '"/>' +
-      '<path d="M11 8.6v10.8c0 .7.8 1.1 1.4.75L20 14.6a.85.85 0 0 0 0-1.5l-7.6-5.55c-.6-.35-1.4.05-1.4.75Z" fill="' + tone.bg + '" transform="scale(0.93) translate(1,1)"/>' +
-      "</g>") +
       "</svg>"
     );
   }
@@ -442,64 +438,45 @@
   /* =========================================================
      Cards
      ========================================================= */
+  /* ReelCard — the vertical-video primitive. The 9:16 thumbnail is the card;
+     a restrained overlay carries the programme label (top) and duration
+     (bottom), play appears on hover. Title + meta sit below, quiet. */
   function epCard(ep) {
     var p = progOf(ep);
     return (
-      '<article class="ep-card">' +
+      '<article class="reel">' +
       '<a href="' + epURL(ep) + '" aria-label="' + esc(ep.title) + '">' +
-      '<div class="ep-thumb">' +
+      '<div class="reel-media">' +
       thumbSVG(ep) +
-      '<span class="thumb-play">' + icon("i-play", "icon--fill") + "</span>" +
-      '<span class="thumb-dur">' + esc(ep.duration) + "</span>" +
+      '<span class="reel-prog">' + esc(p.title) + "</span>" +
+      '<span class="reel-play">' + icon("i-play", "icon--fill") + "</span>" +
+      '<span class="reel-dur"><span class="ltr-num">' + esc(ep.duration) + "</span></span>" +
       "</div>" +
-      /* hierarchy: thumbnail → title → program → metadata */
-      '<div class="ep-body">' +
-      '<h3 class="ep-title">' + esc(ep.title) + "</h3>" +
-      '<div class="ep-meta">' +
-      '<span class="ep-program">' + esc(p.title) + "</span>" +
-      '<span class="meta-dot">·</span><span>' + fmtDate(ep.date) + "</span>" +
-      "</div></div></a></article>"
-    );
-  }
-
-  /* Archive shelf: portrait posters stamped with their year. Deliberately a
-     different object from the 16:9 episode cards above — an archive is browsed
-     by era, so the year is content here, not metadata. */
-  function archCard(ep) {
-    var p = progOf(ep);
-    var year = arNum(ep.date.slice(0, 4));
-    return (
-      '<article class="arch">' +
-      '<a href="' + epURL(ep) + '">' +
-      '<span class="arch-poster">' +
-      thumbSVG(ep, false, true) +
-      '<span class="arch-year">' + year + "</span>" +
-      '<span class="arch-play">' + icon("i-play", "icon--fill") + "</span>" +
-      "</span>" +
-      '<h3 class="arch-title">' + esc(ep.title) + "</h3>" +
-      '<div class="arch-meta">' +
-      "<span>" + esc(p.title) + '</span><span class="meta-dot">·</span>' +
-      '<span class="ltr-num">' + esc(ep.duration) + "</span>" +
+      '<div class="reel-body">' +
+      '<h3 class="reel-title">' + esc(ep.title) + "</h3>" +
+      '<div class="reel-meta">' + fmtDate(ep.date) + "</div>" +
       "</div></a></article>"
     );
   }
 
+  /* Archive picks: a larger featured reel beside supporting ones — both keep
+     the native 9:16 frame, the lead is simply given more room. */
   function pickLead(ep) {
     var p = progOf(ep);
     return (
-      '<article class="ep-card pick-lead">' +
+      '<article class="reel pick-lead">' +
       '<a href="' + epURL(ep) + '">' +
-      '<div class="ep-thumb">' +
+      '<div class="reel-media">' +
       thumbSVG(ep, true) +
-      '<span class="arch-year">' + arNum(ep.date.slice(0, 4)) + "</span>" +
-      '<span class="thumb-play">' + icon("i-play", "icon--fill") + "</span>" +
-      '<span class="thumb-dur">' + esc(ep.duration) + "</span>" +
+      '<span class="reel-prog">' + esc(p.title) + "</span>" +
+      '<span class="reel-year">' + arNum(ep.date.slice(0, 4)) + "</span>" +
+      '<span class="reel-play">' + icon("i-play", "icon--fill") + "</span>" +
+      '<span class="reel-dur"><span class="ltr-num">' + esc(ep.duration) + "</span></span>" +
       "</div>" +
-      '<div class="ep-body">' +
-      '<span class="ep-program">' + esc(p.title) + "</span>" +
-      '<h3 class="ep-title">' + esc(ep.title) + "</h3>" +
+      '<div class="reel-body">' +
+      '<h3 class="reel-title">' + esc(ep.title) + "</h3>" +
       '<p class="pick-desc">' + esc(ep.description) + "</p>" +
-      '<div class="ep-meta"><span>' + fmtDate(ep.date) + '</span><span class="meta-dot">·</span><span class="ltr-num">' + esc(ep.duration) + "</span></div>" +
+      '<div class="reel-meta">' + fmtDate(ep.date) + "</div>" +
       "</div></a></article>"
     );
   }
@@ -507,19 +484,17 @@
   function pickRow(ep) {
     var p = progOf(ep);
     return (
-      '<article class="ep-card pick-row">' +
-      '<a href="' + epURL(ep) + '" style="display:contents">' +
-      '<div class="ep-thumb">' +
+      '<article class="reel pick-row">' +
+      '<a href="' + epURL(ep) + '">' +
+      '<div class="reel-media">' +
       thumbSVG(ep) +
-      '<span class="thumb-play">' + icon("i-play", "icon--fill") + "</span>" +
+      '<span class="reel-year">' + arNum(ep.date.slice(0, 4)) + "</span>" +
+      '<span class="reel-play">' + icon("i-play", "icon--fill") + "</span>" +
       "</div>" +
-      '<div class="pick-row-body">' +
-      '<h3 class="ep-title">' + esc(ep.title) + "</h3>" +
-      '<div class="ep-meta">' +
-      '<span class="ep-program">' + esc(p.title) + "</span>" +
-      '<span class="meta-dot">·</span><span>' + arNum(ep.date.slice(0, 4)) + "</span>" +
-      '<span class="meta-dot">·</span><span class="ltr-num">' + esc(ep.duration) + "</span>" +
-      "</div></div></a></article>"
+      '<div class="reel-body">' +
+      '<h3 class="reel-title">' + esc(ep.title) + "</h3>" +
+      '<div class="reel-meta">' + esc(p.title) + " · " + arNum(ep.date.slice(0, 4)) + "</div>" +
+      "</div></a></article>"
     );
   }
 
@@ -668,32 +643,55 @@
      ========================================================= */
   function pageHome() {
     var featured = epById[D.featured] || D.episodes.slice().sort(byDateDesc)[0];
-    var stripEps = [featured].concat(latest(3, featured.id));
-    var current = 0;
-    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var AUTO_SECS = 7;
 
-    /* stage — cinematic: text overlays the poster, the image sells the episode */
+    /* stage — a full three-part composition: featured Reel (inline-start),
+       episode information (centre), latest-clips rail (inline-end).
+       No empty regions: every column earns its width. */
     var stage = $("#heroStage");
+
+    function heroRailHTML(exclude) {
+      var items = latest(4, exclude.id);
+      return (
+        '<aside class="hero-rail" aria-label="أحدث المقاطع">' +
+        '<div class="hero-rail-head">أحدث المقاطع</div>' +
+        items.map(function (x) {
+          var xp = progOf(x);
+          return (
+            '<a class="hr-item" href="' + epURL(x) + '">' +
+            '<span class="hr-thumb">' + thumbSVG(x) + "</span>" +
+            '<span class="hr-body">' +
+            '<span class="hr-title">' + esc(x.title) + "</span>" +
+            '<span class="hr-meta">' + esc(xp.title) + ' · <span class="ltr-num">' + esc(x.duration) + "</span></span>" +
+            "</span></a>"
+          );
+        }).join("") +
+        "</aside>"
+      );
+    }
+
     function stageHTML(ep) {
       var p = progOf(ep);
       return (
         '<div class="stage-media" id="stageMedia">' +
         thumbSVG(ep, true) +
         '<div class="stage-scrim"></div>' +
+        '<span class="stage-badge">' + icon("i-play", "icon--fill icon--s") + "ريلز</span>" +
         '<button class="stage-play" data-hero-play="' + ep.id + '" aria-label="تشغيل: ' + esc(ep.title) + '">' +
         '<span class="play-disc">' + icon("i-play", "icon--fill") + "</span></button>" +
+        '<span class="stage-dur"><span class="ltr-num">' + esc(ep.duration) + "</span></span>" +
         '<div class="stage-note" id="stageNote">' + icon("i-info") +
         "<span>لم يُربط مصدر الفيديو لهذه الحلقة بعد.</span></div>" +
         "</div>" +
         '<div class="stage-info">' +
         '<a class="stage-program" href="' + progURL(p) + '">' + icon("i-play", "icon--fill") + esc(p.title) + "</a>" +
         '<h1 class="stage-title"><a href="' + epURL(ep) + '">' + esc(ep.title) + "</a></h1>" +
+        '<p class="stage-desc">' + esc(ep.description) + "</p>" +
         '<div class="stage-meta"><span>' + fmtDate(ep.date) + '</span><span class="meta-dot">·</span><span class="ltr-num">' + esc(ep.duration) + "</span></div>" +
         '<div class="stage-actions">' +
-        '<a class="btn btn--gold btn--hero" href="' + epURL(ep) + '">' + icon("i-play", "icon--fill") + "شاهد الحلقة</a>" +
+        '<a class="btn btn--gold btn--hero" href="' + epURL(ep) + '">' + icon("i-play", "icon--fill") + "شاهد الفيديو</a>" +
         '<button class="btn btn--ghost btn--s" data-copy="' + ep.id + '">' + icon("i-copy") + "نسخ الرابط</button>" +
-        "</div></div>"
+        "</div></div>" +
+        heroRailHTML(ep)
       );
     }
 
@@ -722,14 +720,13 @@
       }, 260);
     }
 
-    /* play the featured episode inline, right in the hero stage */
+    /* play the featured reel inline, right in the hero stage */
     stage.addEventListener("click", function (e) {
       var btn = e.target.closest("[data-hero-play]");
       if (!btn) return;
       var ep = epById[btn.getAttribute("data-hero-play")];
       if (!ep) return;
       playingInline = true;    // never yank a playing video away
-      stopAuto();
       stage.classList.add("is-playing");
       var ok = mountPlayback($("#stageMedia"), ep, true);
       if (!ok) {
@@ -744,83 +741,7 @@
       }
     });
 
-    /* strip */
-    var strip = $("#heroStrip");
-    strip.innerHTML = stripEps.map(function (ep, i) {
-      var p = progOf(ep);
-      return (
-        '<button class="strip-item' + (i === 0 ? " active" : "") + '" data-i="' + i + '" style="--strip-secs:' + AUTO_SECS + 's">' +
-        '<span class="strip-thumb">' + thumbSVG(ep) + "</span>" +
-        "<span>" +
-        '<span class="strip-p">' + esc(p.title) + "</span>" +
-        '<span class="strip-t">' + esc(ep.title) + "</span>" +
-        "</span>" +
-        '<span class="strip-bar"><i></i></span>' +
-        "</button>"
-      );
-    }).join("");
-
-    function setActive(i, animate) {
-      current = i;
-      renderStage(stripEps[i], animate);
-      $$(".strip-item", strip).forEach(function (el, k) {
-        var on = k === i;
-        el.classList.toggle("active", on);
-        if (on) {
-          /* restart the progress hairline */
-          var bar = $(".strip-bar i", el);
-          if (bar) {
-            bar.style.animation = "none";
-            void bar.offsetWidth;
-            bar.style.animation = "";
-          }
-        }
-      });
-    }
-
     renderStage(featured, false);
-
-    var timer = null;
-    var advances = 0;
-    var touchDevice = window.matchMedia("(pointer: coarse)").matches;
-    function startAuto() {
-      if (reduced || stripEps.length < 2) return;
-      if (playingInline) return; // a video is on screen; leave it alone
-      /* on touch there is no hover-pause: stop after one full cycle (WCAG 2.2.2) */
-      if (touchDevice && advances >= stripEps.length) return;
-      stopAuto();
-      timer = setInterval(function () {
-        advances++;
-        setActive((current + 1) % stripEps.length, true);
-        if (touchDevice && advances >= stripEps.length) stopAuto();
-      }, AUTO_SECS * 1000);
-    }
-    function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
-
-    strip.addEventListener("click", function (e) {
-      var item = e.target.closest(".strip-item");
-      if (!item) return;
-      var i = +item.getAttribute("data-i");
-      if (i === current) return;
-      setActive(i, true);
-      startAuto(); /* reset cadence after manual choice */
-    });
-
-    var hero = $(".hero");
-    function pauseAuto() { hero.classList.add("paused"); stopAuto(); }
-    function resumeAuto() { hero.classList.remove("paused"); startAuto(); }
-    hero.addEventListener("mouseenter", pauseAuto);
-    hero.addEventListener("mouseleave", resumeAuto);
-    /* keyboard users get the same pause as hover */
-    hero.addEventListener("focusin", pauseAuto);
-    hero.addEventListener("focusout", function (e) {
-      if (!hero.contains(e.relatedTarget)) resumeAuto();
-    });
-    document.addEventListener("visibilitychange", function () {
-      if (document.hidden) stopAuto(); else startAuto();
-    });
-    startAuto();
-    if (reduced) $$(".strip-bar", strip).forEach(function (b) { b.style.display = "none"; });
 
     /* latest */
     var latestEps = D.episodes.slice().sort(byDateDesc).slice(0, 8);
@@ -1211,29 +1132,36 @@
       '<a href="' + progURL(p) + '">' + esc(p.title) + "</a>" + icon("i-arrow", "icon--s") +
       "<span>الحلقة " + arNum(ep.no) + "</span></div>" +
 
+      /* info | portrait player | playlist — the 9:16 frame is the centrepiece */
       '<div class="watch-grid">' +
-      '<div class="watch-main">' +
-      '<div class="player" id="player">' +
-      thumbSVG(ep, true) +
-      '<div class="stage-scrim"></div>' +
-      '<button class="stage-play" id="playBtn" aria-label="تشغيل الحلقة">' +
-      '<span class="play-disc">' + icon("i-play", "icon--fill") + "</span></button>" +
-      '<div class="player-note" id="playerNote">' + icon("i-info") +
-      "<span>لم يُربط مصدر الفيديو لهذه الحلقة التجريبية بعد — تُشاهَد حاليًا عبر قناة تيليجرام.</span></div>" +
-      "</div>" +
       '<div class="watch-info">' +
       '<a class="stage-program" href="' + progURL(p) + '">' + icon("i-play", "icon--fill") + esc(p.title) + "</a>" +
       "<h1>" + esc(ep.title) + "</h1>" +
-      '<div class="watch-row">' +
       '<div class="stage-meta">' +
       "<span>" + fmtDate(ep.date) + "</span>" +
       '<span class="meta-dot">·</span><span class="ltr-num">' + esc(ep.duration) + "</span>" +
       "</div>" +
-      '<div class="watch-actions">' +
-      '<button class="btn btn--ghost btn--s" id="shareBtn">' + icon("i-share") + "مشاركة</button>" +
-      '<button class="btn btn--gold btn--s" id="copyBtn">' + icon("i-copy") + "نسخ الرابط</button>" +
-      "</div></div></div>" +
+      '<p class="watch-desc">' + esc(ep.description) + "</p>" +
+      '<div class="tag-row">' +
+      (ep.tags || []).map(function (t) {
+        return '<a class="tag" href="search.html?q=' + encodeURIComponent(t) + '">' + esc(t) + "</a>";
+      }).join("") +
       "</div>" +
+      '<div class="watch-actions">' +
+      '<button class="btn btn--gold btn--s" id="copyBtn">' + icon("i-copy") + "نسخ الرابط</button>" +
+      '<button class="btn btn--ghost btn--s" id="shareBtn">' + icon("i-share") + "مشاركة</button>" +
+      "</div></div>" +
+
+      '<div class="watch-stage">' +
+      '<div class="player" id="player">' +
+      thumbSVG(ep, true) +
+      '<div class="stage-scrim"></div>' +
+      '<button class="stage-play" id="playBtn" aria-label="تشغيل الفيديو">' +
+      '<span class="play-disc">' + icon("i-play", "icon--fill") + "</span></button>" +
+      '<span class="stage-dur"><span class="ltr-num">' + esc(ep.duration) + "</span></span>" +
+      '<div class="player-note" id="playerNote">' + icon("i-info") +
+      "<span>لم يُربط مصدر الفيديو لهذه الحلقة بعد.</span></div>" +
+      "</div></div>" +
 
       /* playlist rail */
       '<aside class="pl" aria-label="قائمة تشغيل البرنامج">' +
@@ -1247,19 +1175,11 @@
       "</div></div></div>" +
 
       '<div class="watch-body"><div class="container">' +
-      '<div class="about-ep rv in">' +
-      "<h2>عن الحلقة</h2>" +
-      '<p class="about-text">' + esc(ep.description) + "</p>" +
-      '<div class="tag-row">' +
-      (ep.tags || []).map(function (t) {
-        return '<a class="tag" href="search.html?q=' + encodeURIComponent(t) + '">' + esc(t) + "</a>";
-      }).join("") +
-      "</div></div>" +
 
       '<section class="section" style="padding-block-end:0">' +
       '<div class="sec-head"><h2>حلقات ذات صلة</h2>' +
       '<a class="sec-more" href="' + progURL(p) + '">كل حلقات ' + esc(p.title) + icon("i-arrow", "icon--s") + "</a></div>" +
-      '<div class="ep-grid ep-grid--3" id="relatedGrid"></div>' +
+      '<div class="reel-grid reel-grid--related" id="relatedGrid"></div>' +
       "</section>" +
       "</div></div>";
 
