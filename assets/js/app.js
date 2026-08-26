@@ -491,6 +491,7 @@
       '<a href="' + epURL(ep) + '">' +
       '<div class="ep-thumb">' +
       thumbSVG(ep, true) +
+      '<span class="arch-year">' + arNum(ep.date.slice(0, 4)) + "</span>" +
       '<span class="thumb-play">' + icon("i-play", "icon--fill") + "</span>" +
       '<span class="thumb-dur">' + esc(ep.duration) + "</span>" +
       "</div>" +
@@ -516,6 +517,7 @@
       '<h3 class="ep-title">' + esc(ep.title) + "</h3>" +
       '<div class="ep-meta">' +
       '<span class="ep-program">' + esc(p.title) + "</span>" +
+      '<span class="meta-dot">·</span><span>' + arNum(ep.date.slice(0, 4)) + "</span>" +
       '<span class="meta-dot">·</span><span class="ltr-num">' + esc(ep.duration) + "</span>" +
       "</div></div></a></article>"
     );
@@ -833,11 +835,26 @@
     var progMore = $("#programsMore");
     if (progMore) progMore.textContent = "صفحة البرامج";
 
-    /* archive shelf — oldest-first, so the section reads as going back in time */
+    /* discover gateway: quick routes into the archive */
+    var chipsEl = $("#discoverChips");
+    if (chipsEl) {
+      chipsEl.innerHTML =
+        '<a class="d-chip is-all" href="episodes.html">الكل</a>' +
+        D.programs.map(function (pr) {
+          return '<a class="d-chip" href="' + progURL(pr) + '">' + esc(pr.title) + "</a>";
+        }).join("") +
+        '<span class="d-chip-sep" aria-hidden="true"></span>' +
+        '<a class="d-chip d-chip--sort" href="episodes.html?sort=new">الأحدث</a>' +
+        '<a class="d-chip d-chip--sort" href="episodes.html?sort=old">الأقدم</a>';
+      var sub = $("#discoverSub");
+      if (sub) sub.textContent = "ابحث في مكتبة درب ميديا — " + arNum(D.episodes.length) + " حلقة عبر " + arNum(D.programs.length) + " برامج";
+    }
+
+    /* archive picks: one featured lead + compact rows */
     var picks = (D.picks || []).map(function (id) { return epById[id]; }).filter(Boolean);
-    var shelf = $("#archShelf");
-    if (shelf && picks.length) {
-      shelf.innerHTML = picks.slice().sort(byDateAsc).map(archCard).join("");
+    if (picks.length) {
+      $("#pickLead").innerHTML = pickLead(picks[0]);
+      $("#pickRows").innerHTML = picks.slice(1, 5).map(pickRow).join("");
     }
   }
 

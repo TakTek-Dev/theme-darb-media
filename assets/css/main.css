@@ -854,6 +854,69 @@ input, textarea { caret-color: var(--gold-deep); }
    Picks (مختارات درب) — asymmetric
    ========================================================= */
 /* =========================================================
+   Discover — a light gateway into the archive.
+   Deliberately small: one line, one field, one row of routes.
+   ========================================================= */
+.discover {
+  background: var(--surface-light);
+  border-block: 1px solid var(--border-light);
+  padding-block: 56px;
+}
+.discover-head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-block-end: 22px; }
+.discover-head h2 {
+  font-family: var(--f-display);
+  font-size: 1.5rem; font-weight: 800;
+  letter-spacing: -0.015em;
+  color: var(--on-light-1);
+}
+.discover-head p { font-size: var(--t-meta); color: var(--on-light-3); font-variant-numeric: tabular-nums; }
+
+.discover-search {
+  position: relative;
+  display: flex; align-items: center; gap: 10px;
+  max-width: 640px;
+  background: var(--surface-bright);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--r-md);
+  padding: 6px 6px 6px 6px;
+  padding-inline-start: 18px;
+  transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.discover-search:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(251, 193, 24, 0.16);
+}
+.discover-search .icon { width: 18px; height: 18px; color: var(--on-light-3); flex: none; }
+.discover-search input {
+  flex: 1; min-width: 0;
+  border: 0; background: none; outline: none;
+  font-size: var(--t-body-sm);
+  padding-block: 8px;
+}
+.discover-search input::placeholder { color: var(--on-light-3); }
+.discover-search .btn { flex: none; }
+
+.discover-chips {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+  margin-block-start: 18px;
+}
+.d-chip {
+  padding: 7px 16px;
+  font-size: var(--t-meta); font-weight: 600;
+  color: var(--on-light-2);
+  background: var(--surface-bright);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-pill);
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease),
+              background var(--t-fast) var(--ease);
+}
+.d-chip:hover { color: var(--on-light-1); border-color: var(--navy-500); }
+.d-chip.is-all { background: var(--navy-700); border-color: var(--navy-700); color: #fff; }
+.d-chip.is-all:hover { background: var(--navy-600); }
+.d-chip--sort { background: transparent; }
+.d-chip-sep { width: 1px; height: 22px; background: var(--line-2); margin-inline: 6px; }
+
+/* =========================================================
    Archive shelf
    Portrait posters stamped with their year — browsed by era,
    not by recency, so it reads as a different object from the
@@ -1015,12 +1078,12 @@ input, textarea { caret-color: var(--gold-deep); }
 .footer-inner { position: relative; z-index: 1; }
 .footer-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.8fr) minmax(0, 0.9fr) minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: 48px;
+  grid-template-columns: minmax(0, 2.1fr) minmax(0, 0.85fr) minmax(0, 0.85fr) minmax(0, 1fr);
+  gap: 40px;
   padding-block: 68px 48px;
   border-block-start: 1px solid var(--border-dark);
 }
-.footer-brand { max-width: 40ch; }
+.footer-brand { max-width: 42ch; }
 .footer-brand img { height: 42px; margin-block-end: 20px; opacity: 0.92; }
 .footer-brand p { color: var(--on-dark-4); line-height: 1.9; }
 .footer-col h4 {
@@ -1068,16 +1131,19 @@ input, textarea { caret-color: var(--gold-deep); }
    the poster numerals — the footer's own piece of the visual world */
 .footer-wordmark {
   position: absolute;
-  inset-inline: 0; inset-block-end: -0.26em;
+  inset-inline: 0; inset-block-end: -0.1em;
   z-index: 0;
   text-align: center;
   font-family: var(--f-display);
   font-weight: 800;
-  font-size: clamp(4rem, 15vw, 13rem);
-  line-height: 0.9;
+  font-size: clamp(3.4rem, 12.5vw, 11rem);
+  line-height: 1;
   letter-spacing: -0.02em;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.065);
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.07);
+  /* fades out before the baseline so the crop reads as intent, not clipping */
+  -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent 92%);
+  mask-image: linear-gradient(to bottom, #000 30%, transparent 92%);
   pointer-events: none;
   white-space: nowrap;
   -webkit-user-select: none; user-select: none;
@@ -2024,6 +2090,11 @@ video.player-frame { object-fit: contain; }
   .pgm-meta { gap: 12px; }
   .pgm-count { display: none; } /* the count lives on the programme page */
   .pgm-go { width: 34px; height: 34px; }
+
+  .discover { padding-block: 44px; }
+  .discover-chips { gap: 7px; }
+  .d-chip { padding: 6px 13px; font-size: var(--t-label); }
+  .d-chip-sep { display: none; }
 
   .prog-card { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 12px 12px 20px; }
   .prog-cover { margin-block-end: 16px; }

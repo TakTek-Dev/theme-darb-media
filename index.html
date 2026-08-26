@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/main.css?v=37">
+  <link rel="stylesheet" href="assets/css/main.css?v=39">
 </head>
 <body data-page="home" data-header="dark">
 <!--
@@ -54,6 +54,22 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       </div>
     </section>
 
+    <!-- Discover: a light gateway into the archive -->
+    <section class="discover" aria-labelledby="discoverTitle">
+      <div class="container">
+        <div class="discover-head">
+          <h2 id="discoverTitle">اكتشف الأرشيف</h2>
+          <p id="discoverSub">ابحث في مكتبة درب ميديا واستكشف الحلقات والبرامج</p>
+        </div>
+        <form class="discover-search" action="search.html" method="get" role="search">
+          <svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg>
+          <input type="search" name="q" placeholder="ابحث عن حلقة أو برنامج..." aria-label="ابحث عن حلقة أو برنامج" autocomplete="off">
+          <button class="btn btn--gold btn--s" type="submit">بحث</button>
+        </form>
+        <div class="discover-chips" id="discoverChips"></div>
+      </div>
+    </section>
+
     <!-- Programs -->
     <section class="section on-navy" aria-labelledby="programsTitle">
       <div class="container">
@@ -69,10 +85,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     <section class="section section--alt" aria-labelledby="picksTitle">
       <div class="container">
         <div class="sec-head rv">
-          <h2 id="picksTitle">من الأرشيف</h2>
+          <h2 id="picksTitle">مختارات من الأرشيف</h2>
           <span class="sec-count">حلقات أقدم تستحق العودة إليها</span>
         </div>
-        <div class="arch-shelf" id="archShelf"></div>
+        <div class="picks-grid">
+          <div id="pickLead"></div>
+          <div class="pick-rows" id="pickRows"></div>
+        </div>
       </div>
     </section>
 
@@ -94,8 +113,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
   <div id="ftr"></div>
 
-  <script src="assets/js/data.js?v=37"></script>
-  <script src="assets/js/player.js?v=37"></script>
-  <script src="assets/js/app.js?v=37"></script>
+  <script src="assets/js/data.js?v=39"></script>
+  <script src="assets/js/player.js?v=39"></script>
+  <script src="assets/js/app.js?v=39"></script>
 </body>
 </html>
